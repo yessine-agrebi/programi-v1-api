@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ProgramsService } from './programs.service';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
@@ -35,7 +45,10 @@ export class ProgramsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateProgramDto: UpdateProgramDto,
+  ) {
     const program = await this.programsService.update(+id, updateProgramDto);
     if (!program) {
       throw new NotFoundException(`Error updating program with id ${id}`);
@@ -55,7 +68,9 @@ export class ProgramsController {
   getWorkoutsOfProgram(@Param('id') id: string) {
     const workouts = this.programsService.getWorkoutsOfProgram(+id);
     if (!workouts) {
-      throw new NotFoundException(`Error finding workouts for program with id ${id}`);
+      throw new NotFoundException(
+        `Error finding workouts for program with id ${id}`,
+      );
     }
     return workouts;
   }
