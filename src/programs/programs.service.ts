@@ -69,6 +69,7 @@ export class ProgramsService {
   }
 
   result[programKey].exercises.push({
+    exerciseId: item.exercise.exerciseId,
     exerciseName: item.exercise.exerciseName,
     bodyPart: item.exercise.bodyPart,
     equipment: item.exercise.equipment,

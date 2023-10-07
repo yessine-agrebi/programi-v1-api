@@ -52,8 +52,8 @@ export class SetsController {
     return set;
   }
   @Get('exercise/:exerciseId')
-  async getSetsByExerciseId(exerciseId: number) {
-    const setDetails = await this.setsService.getSetsByExerciseId(exerciseId);
+  async getSetsByExerciseId(@Param('exerciseId') exerciseId: number) {
+    const setDetails = await this.setsService.getSetsByExerciseId(+exerciseId);
     if (!setDetails) {
       throw new NotFoundException(`Error getting sets for exercise with id ${exerciseId}`);
     }

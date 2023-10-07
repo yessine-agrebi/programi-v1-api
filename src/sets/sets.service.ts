@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateSetDto } from './dto/create-set.dto';
 import { UpdateSetDto } from './dto/update-set.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Set } from './entities/set.entity';
 
 @Injectable()
 export class SetsService {
@@ -26,25 +27,53 @@ export class SetsService {
     return this.prisma.set.delete({where: {setId: id}});
   }
 
-  getSetsByExerciseId(exerciseId: number) {
-    const setDetails = this.prisma.set.findMany({
+  async getSetsByExerciseId(exerciseId: number) {
+    const results = await this.prisma.set.findMany({
       where: {
         workout: {
-          exercise: {
-            exerciseId: 1,
-          },
-        },
-      },
-      select: {
-        reps: true,
-        weight: true,
-        setNum: true,
+          exerciseId: exerciseId
+        }
       },
       orderBy: {
-        setNum: 'asc',
+        workout: {
+          date: 'asc'
+        }
       },
+      include: {
+        workout: {
+          select: {
+            date: true,
+            exerciseId: true
+          },
+          
+        }
+
+      }
+    })
+    
+    //group sets by workout date
+    const groupedSets = {};
+    results.forEach((set: Set) => {
+        const date = set.workout.date.toISOString().split('T')[0];
+        if (!groupedSets[date]) {
+            groupedSets[date] = [];
+        }
+        groupedSets[date].push({
+            setId: set.setId,
+            reps: set.reps,
+            weight: set.weight,
+            setNum: set.setNum,
+            isBestSet: set.isBestSet,
+        });
     });
-    return setDetails;
+
+    // Convert grouped sets to desired format
+    const result = Object.keys(groupedSets).map(date => ({
+        date: date,
+        sets: groupedSets[date],
+    }));
+
+    return result;
     
   }
     
