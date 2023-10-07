@@ -6,23 +6,23 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class SetsService {
   constructor(private prisma: PrismaService) {}
-  async create(createSetDto: CreateSetDto) {
-    return await this.prisma.set.create({data: createSetDto});
+  create(createSetDto: CreateSetDto) {
+    return this.prisma.set.create({data: createSetDto});
   }
 
-  async findAll() {
-    return await this.prisma.set.findMany();
+  findAll() {
+    return this.prisma.set.findMany();
   }
 
-  async findOne(id: number) {
-    return await this.prisma.set.findUnique({where: {setId: id}});
+  findOne(id: number) {
+    return this.prisma.set.findUnique({where: {setId: id}});
   }
 
-  async update(id: number, updateSetDto: UpdateSetDto) {
-    return await this.prisma.set.update({where: {setId: id}, data: updateSetDto});
+  update(id: number, updateSetDto: UpdateSetDto) {
+    return this.prisma.set.update({where: {setId: id}, data: updateSetDto});
   }
 
-  async remove(id: number) {
-    return await this.prisma.set.delete({where: {setId: id}});
+  remove(id: number) {
+    return this.prisma.set.delete({where: {setId: id}});
   }
 }

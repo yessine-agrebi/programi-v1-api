@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, NotFoundException } from '@nestjs/common';
 import { SetsService } from './sets.service';
 import { CreateSetDto } from './dto/create-set.dto';
 import { UpdateSetDto } from './dto/update-set.dto';
@@ -9,26 +9,46 @@ export class SetsController {
 
   @Post()
   create(@Body() createSetDto: CreateSetDto) {
-    return this.setsService.create(createSetDto);
+    const set = this.setsService.create(createSetDto);
+    if (!set) {
+      throw new BadRequestException('Error creating set');
+    }
+    return set;
   }
 
   @Get()
   findAll() {
-    return this.setsService.findAll();
+    const sets = this.setsService.findAll();
+    if (!sets) {
+      throw new NotFoundException('Error finding sets');
+    }
+    return sets;
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.setsService.findOne(+id);
+    const set = this.setsService.findOne(+id);
+    if (!set) {
+      throw new NotFoundException(`Error finding set with id ${id}`);
+    }
+    return set;
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSetDto: UpdateSetDto) {
-    return this.setsService.update(+id, updateSetDto);
+    const set = this.setsService.update(+id, updateSetDto);
+    if (!set) {
+      throw new NotFoundException(`Error updating set with id ${id}`);
+    }
+    return set;
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.setsService.remove(+id);
+    const set = this.setsService.remove(+id);
+    if (!set) {
+      throw new NotFoundException(`Error deleting set with id ${id}`);
+    }
+    return set;
   }
 }
