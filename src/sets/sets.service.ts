@@ -25,4 +25,27 @@ export class SetsService {
   remove(id: number) {
     return this.prisma.set.delete({where: {setId: id}});
   }
+
+  getSetsByExerciseId(exerciseId: number) {
+    const setDetails = this.prisma.set.findMany({
+      where: {
+        workout: {
+          exercise: {
+            exerciseId: 1,
+          },
+        },
+      },
+      select: {
+        reps: true,
+        weight: true,
+        setNum: true,
+      },
+      orderBy: {
+        setNum: 'asc',
+      },
+    });
+    return setDetails;
+    
+  }
+    
 }

@@ -8,8 +8,8 @@ export class SetsController {
   constructor(private readonly setsService: SetsService) {}
 
   @Post()
-  create(@Body() createSetDto: CreateSetDto) {
-    const set = this.setsService.create(createSetDto);
+  async create(@Body() createSetDto: CreateSetDto) {
+    const set = await this.setsService.create(createSetDto);
     if (!set) {
       throw new BadRequestException('Error creating set');
     }
@@ -17,8 +17,8 @@ export class SetsController {
   }
 
   @Get()
-  findAll() {
-    const sets = this.setsService.findAll();
+  async findAll() {
+    const sets = await this.setsService.findAll();
     if (!sets) {
       throw new NotFoundException('Error finding sets');
     }
@@ -26,8 +26,8 @@ export class SetsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const set = this.setsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const set = await this.setsService.findOne(+id);
     if (!set) {
       throw new NotFoundException(`Error finding set with id ${id}`);
     }
@@ -35,8 +35,8 @@ export class SetsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSetDto: UpdateSetDto) {
-    const set = this.setsService.update(+id, updateSetDto);
+  async update(@Param('id') id: string, @Body() updateSetDto: UpdateSetDto) {
+    const set = await this.setsService.update(+id, updateSetDto);
     if (!set) {
       throw new NotFoundException(`Error updating set with id ${id}`);
     }
@@ -44,11 +44,19 @@ export class SetsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    const set = this.setsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const set = await this.setsService.remove(+id);
     if (!set) {
       throw new NotFoundException(`Error deleting set with id ${id}`);
     }
     return set;
+  }
+  @Get('exercise/:exerciseId')
+  async getSetsByExerciseId(exerciseId: number) {
+    const setDetails = await this.setsService.getSetsByExerciseId(exerciseId);
+    if (!setDetails) {
+      throw new NotFoundException(`Error getting sets for exercise with id ${exerciseId}`);
+    }
+    return setDetails;
   }
 }
