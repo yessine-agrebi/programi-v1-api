@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, NotFoundException } from '@nestjs/common';
 import { ProgramsService } from './programs.service';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
@@ -8,31 +8,55 @@ export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}
 
   @Post()
-  create(@Body() createProgramDto: CreateProgramDto) {
-    return this.programsService.create(createProgramDto);
+  async create(@Body() createProgramDto: CreateProgramDto) {
+    const program = await this.programsService.create(createProgramDto);
+    if (!program) {
+      throw new BadRequestException('Error creating program');
+    }
+    return program;
   }
 
   @Get()
-  findAll() {
-    return this.programsService.findAll();
+  async findAll() {
+    const programs = await this.programsService.findAll();
+    if (!programs) {
+      throw new NotFoundException('Error finding programs');
+    }
+    return programs;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.programsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const program = await this.programsService.findOne(+id);
+    if (!program) {
+      throw new NotFoundException(`Error finding program with id ${id}`);
+    }
+    return program;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto) {
-    return this.programsService.update(+id, updateProgramDto);
+  async update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto) {
+    const program = await this.programsService.update(+id, updateProgramDto);
+    if (!program) {
+      throw new NotFoundException(`Error updating program with id ${id}`);
+    }
+    return program;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.programsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const program = await this.programsService.remove(+id);
+    if (!program) {
+      throw new NotFoundException(`Error deleting program with id ${id}`);
+    }
+    return program;
   }
   @Get('/workouts/:id')
   getWorkoutsOfProgram(@Param('id') id: string) {
-    return this.programsService.getWorkoutsOfProgram(+id);
+    const workouts = this.programsService.getWorkoutsOfProgram(+id);
+    if (!workouts) {
+      throw new NotFoundException(`Error finding workouts for program with id ${id}`);
+    }
+    return workouts;
   }
 }

@@ -7,9 +7,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ProgramsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createProgramDto: CreateProgramDto) {
+  create(createProgramDto: CreateProgramDto) {
     try {
-      return await this.prisma.program.create({ data: createProgramDto });
+      return this.prisma.program.create({ data: createProgramDto });
     } catch (error) {
       console.log(error);
       throw new Error('Error creating program');
@@ -33,6 +33,7 @@ export class ProgramsService {
   remove(id: number) {
     return this.prisma.program.delete({ where: { programId: id } });
   }
+  
   async getWorkoutsOfProgram(id: number) {
     const result = await this.prisma.workout.findMany({
       select: {
@@ -58,7 +59,7 @@ export class ProgramsService {
     });
 
     const groupedResults = result.reduce((result, item) => {
-  const programKey = `${item.program.programName}-${item.program.description}`;
+    const programKey = `${item.program.programName}-${item.program.description}`;
 
   if (!result[programKey]) {
     result[programKey] = {
