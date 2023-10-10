@@ -53,6 +53,7 @@ model Exercise {
 
 model Workout {
   workoutId  Int      @id @default(autoincrement())
+  workoutName String @default("Workout")
   program    Program  @relation(fields: [programId], references: [programId])
   programId  Int
   exercise   Exercise @relation(fields: [exerciseId], references: [exerciseId])

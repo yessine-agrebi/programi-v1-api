@@ -95,7 +95,8 @@ async function seed() {
     {
       programId: 1, 
       exerciseId: 1,
-      date: new Date('2023-10-06'),
+      workouName: 'Leg Day',
+      date: new Date('2023-10-05'),
     },
     {
       programId: 1, // Assuming program with ID 1 exists
@@ -106,14 +107,20 @@ async function seed() {
     {
       programId: 1, // Assuming program with ID 1 exists
       exerciseId: 3, // Assuming exercise with ID 1 exists
-      date: new Date('2023-10-06'),
+      date: new Date('2023-10-07'),
 
     },
     {
       programId: 1, // Assuming program with ID 1 exists
       exerciseId: 4, // Assuming exercise with ID 1 exists
-      date: new Date('2023-10-06'),
-    }
+      date: new Date('2023-10-08'),
+    },
+    {
+      programId: 1, // Assuming program with ID 1 exists
+      exerciseId: 2, // Assuming exercise with ID 1 exists
+      date: new Date('2023-10-08'),
+
+    },
   ];
 
   for (const workout of workouts) {
@@ -175,6 +182,24 @@ async function seed() {
       weight: 60,
       setNum: 2,
       workoutId: 4, 
+    },
+    {
+      reps: 8,
+      weight: 70,
+      setNum: 1,
+      workoutId: 5, 
+    },
+    {
+      reps: 9,
+      weight: 75,
+      setNum: 2,
+      workoutId: 5, 
+    },
+    {
+      reps: 10,
+      weight: 65,
+      setNum: 3,
+      workoutId: 5, 
     },
   ];
 
