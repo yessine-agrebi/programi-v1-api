@@ -14,27 +14,30 @@ import { Set } from './sets/entities/set.entity';
 import { Program } from './programs/entities/program.entity';
 // import { ConfigModule, ConfigService } from '@nestjs/config';
 // import typeorm from './typeorm/typeorm';
+import { config as dotenvConfig } from 'dotenv';
+
+dotenvConfig({ path: '.env' });
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
       // url: 'postgres://postgres:rami@localhost:5432/workout_typeorm',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'rami',
-      database: 'workout_typeorm',
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
       // entities: [__dirname + '/**/*.entity{.ts,.js}'],
       entities: [User, Exercise, Workout, Set, Program],
-      //! DANGER: in production set synchronize to false
+      //! DANGER: in production set synchronize to false (NODE_ENV=production)
       /**
        * if a user creates a new program and you later change the Program entity to remove its relation with User
        * the userId column in the program table in the database will be dropped.
        * If you then bring back the relation, the userId column will be recreated
        * but the previous data won't be recovered, so it will return null.
        */
-      synchronize: true,
+      synchronize: process.env.NODE_ENV !== 'production',
     }),
     // ConfigModule.forRoot({
     //   isGlobal: true,
