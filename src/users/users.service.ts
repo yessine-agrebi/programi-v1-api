@@ -1,29 +1,72 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Not, Repository } from 'typeorm';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
-  async create(createUserDto: CreateUserDto) {
-    return await this.prisma.user.create({data: createUserDto})
+  constructor(
+    @InjectRepository(User) private usersRepository: Repository<User>,
+  ) {}
+
+  async create(attributes: Partial<User>) {
+    const existingUser = await this.usersRepository.findOneBy({
+      email: attributes.email,
+    });
+    if (existingUser) {
+      throw new ConflictException(
+        `User with email ${attributes.email} already exists`,
+      );
+    }
+    try {
+      const user = this.usersRepository.create(attributes);
+      return await this.usersRepository.save(user);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async findAll() {
-    return await this.prisma.user.findMany()
+  findAll() {
+    return this.usersRepository.find();
   }
 
   findOne(id: number) {
-    return this.prisma.user.findUnique({where: {userId: id}})
-    
+    return this.usersRepository.findOneBy({ userId: id });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    return await this.prisma.user.update({where: {userId: id}, data: updateUserDto})
+  async update(id: number, attributes: Partial<User>) {
+    if (attributes.email) {
+      const existingUser = await this.usersRepository.findOneBy({
+        email: attributes.email,
+        userId: Not(id),
+      });
+      if (existingUser) {
+        throw new ConflictException(
+          `User with email ${attributes.email} already exists`,
+        );
+      }
+    }
+    try {
+      const user = await this.usersRepository.findOneBy({ userId: id });
+      if (!user) {
+        throw new NotFoundException(`User with id ${id} not found`);
+      }
+      Object.assign(user, attributes);
+      return this.usersRepository.save(user);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async remove(id: number) {
-    return await this.prisma.user.delete({where: {userId: id}})
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    this.usersRepository.remove(user);
   }
 }

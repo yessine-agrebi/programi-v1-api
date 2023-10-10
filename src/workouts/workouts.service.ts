@@ -1,28 +1,79 @@
-import { Injectable } from '@nestjs/common';
-import { CreateWorkoutDto } from './dto/create-workout.dto';
-import { UpdateWorkoutDto } from './dto/update-workout.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Workout } from './entities/workout.entity';
+import { Repository } from 'typeorm';
+import { ExercisesService } from 'src/exercises/exercises.service';
+import { ProgramsService } from 'src/programs/programs.service';
 
 @Injectable()
 export class WorkoutsService {
-  constructor(private prisma: PrismaService) {}
-  create(createWorkoutDto: CreateWorkoutDto) {
-    return this.prisma.workout.create({data: createWorkoutDto})
+  constructor(
+    @InjectRepository(Workout) private workoutsRepository: Repository<Workout>,
+    private exercisesService: ExercisesService,
+    private programsService: ProgramsService,
+  ) {}
+
+  async create(attributes: Partial<Workout>) {
+    const exercise = await this.exercisesService.findOne(attributes.exerciseId);
+    if (!exercise) {
+      throw new NotFoundException(
+        `Exercise with id ${attributes.exerciseId} not found`,
+      );
+    }
+    const program = await this.programsService.findOne(attributes.programId);
+    if (!program) {
+      throw new NotFoundException(
+        `Program with id ${attributes.programId} not found`,
+      );
+    }
+    try {
+      const workout = this.workoutsRepository.create(attributes);
+      return await this.workoutsRepository.save(workout);
+    } catch (error) {
+      throw error;
+    }
   }
 
   findAll() {
-    return this.prisma.workout.findMany()
+    return this.workoutsRepository.find();
   }
 
   findOne(id: number) {
-    return this.prisma.workout.findUnique({where: {workoutId: id}})
+    return this.workoutsRepository.findOneBy({ workoutId: id });
   }
 
-  update(id: number, updateWorkoutDto: UpdateWorkoutDto) {
-    return this.prisma.workout.update({where: {workoutId: id}, data: updateWorkoutDto})
+  async update(id: number, attributes: Partial<Workout>) {
+    const exercise = await this.exercisesService.findOne(attributes.exerciseId);
+    if (!exercise) {
+      throw new NotFoundException(
+        `Exercise with id ${attributes.exerciseId} not found`,
+      );
+    }
+    const program = await this.programsService.findOne(attributes.programId);
+    if (!program) {
+      throw new NotFoundException(
+        `Program with id ${attributes.programId} not found`,
+      );
+    }
+    try {
+      const workout = await this.workoutsRepository.findOneBy({
+        workoutId: id,
+      });
+      if (!workout) {
+        throw new NotFoundException(`Workout with id ${id} not found`);
+      }
+      Object.assign(workout, attributes);
+      return this.workoutsRepository.save(workout);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.workout.delete({where: {workoutId: id}})
+  async remove(id: number) {
+    const workout = await this.findOne(id);
+    if (!workout) {
+      throw new NotFoundException(`Workout with id ${id} not found`);
+    }
+    return this.workoutsRepository.remove(workout);
   }
 }

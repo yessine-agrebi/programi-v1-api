@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  NotFoundException,
+  Patch,
+  Delete,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -7,48 +18,33 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    const user = this.usersService.create(createUserDto);
-    if (!user) {
-      throw new BadRequestException(`Error creating user`);
-    }
-    return user;
+  @Post('/signup')
+  createUser(@Body() body: CreateUserDto) {
+    return this.usersService.create(body);
   }
 
   @Get()
-  findAll() {
-    const users = this.usersService.findAll();
-    if (!users) {
-      throw new NotFoundException(`No users found`);
-    }
-    return users;
+  findAllUsers() {
+    return this.usersService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
+  @Get('/:id')
+  async findOneUser(@Param('id') id: string) {
     const user = await this.usersService.findOne(+id);
     if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new NotFoundException(`Error finding user with id ${id}`);
     }
     return user;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const user = this.usersService.update(+id, updateUserDto);
-    if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
-    }
-    return user;
+  @Patch('/:id')
+  updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    return this.usersService.update(parseInt(id), body);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    const user = this.usersService.remove(+id);
-    if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
-    }
-    return user;
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteUser(@Param('id') id: string) {
+    await this.usersService.remove(+id);
   }
 }

@@ -1,118 +1,101 @@
-import { Body, Get, Injectable, Post } from '@nestjs/common';
-import { CreateProgramDto } from './dto/create-program.dto';
-import { UpdateProgramDto } from './dto/update-program.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Program } from './entities/program.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProgramsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectRepository(Program) private programsRepository: Repository<Program>,
+    private usersService: UsersService,
+  ) {}
 
-  create(createProgramDto: CreateProgramDto) {
+  async create(attributes: Partial<Program>) {
+    const user = await this.usersService.findOne(attributes.userId);
+    if (!user) {
+      throw new NotFoundException(
+        `User with id ${attributes.userId} not found`,
+      );
+    }
     try {
-      return this.prisma.program.create({ data: createProgramDto });
+      const program = this.programsRepository.create(attributes);
+      return await this.programsRepository.save(program);
     } catch (error) {
-      console.log(error);
-      throw new Error('Error creating program');
+      throw error;
     }
   }
+
   findAll() {
-    return this.prisma.program.findMany();
+    return this.programsRepository.find();
   }
 
   findOne(id: number) {
-    return this.prisma.program.findUnique({ where: { programId: id } });
+    return this.programsRepository.findOneBy({ programId: id });
   }
 
-  update(id: number, updateProgramDto: UpdateProgramDto) {
-    return this.prisma.program.update({
-      where: { programId: id },
-      data: updateProgramDto,
-    });
-  }
-
-  remove(id: number) {
-    return this.prisma.program.delete({ where: { programId: id } });
-  }
-
-  async getWorkoutsOfProgram(id: number) {
-    const workouts = await this.prisma.program.findUnique({
-      where: { programId: id },
-      include: {
-        workouts: {
-          include: {
-            exercise: {
-              select: {
-                exerciseId: true,
-                exerciseName: true,
-                bodyPart: true,
-                equipment: true,
-              },
-            },
-          },
-          orderBy: { date: 'asc' },
-        },
-      },
-    });
-    const processedWorkouts = workouts.workouts.reduce((result, workout) => {
-      const exerciseInfo = {
-        exerciseId: workout.exercise.exerciseId,
-        exerciseName: workout.exercise.exerciseName,
-        bodyPart: workout.exercise.bodyPart,
-        equipment: workout.exercise.equipment,
-      };
-      const dateString = workout.date.toISOString();
-      if (result.has(dateString)) {
-        result.get(dateString).workouts.push({
-          workoutId: workout.workoutId,
-          exercises: [exerciseInfo],
-        });
-      } else {
-        result.set(dateString, {
-          date: dateString,
-          workoutName: workout.workoutName,
-          workoutId: workout.workoutId,
-          workouts: [{
-            workoutId: workout.workoutId,
-            exercises: [exerciseInfo],
-          }],
-        });
+  async update(id: number, attributes: Partial<Program>) {
+    const user = await this.usersService.findOne(attributes.userId);
+    if (!user) {
+      throw new NotFoundException(
+        `User with id ${attributes.userId} not found`,
+      );
+    }
+    try {
+      const program = await this.programsRepository.findOneBy({
+        programId: id,
+      });
+      if (!program) {
+        throw new NotFoundException(`Program with id ${id} not found`);
       }
-    
+      Object.assign(program, attributes);
+      return this.programsRepository.save(program);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async remove(id: number) {
+    const program = await this.findOne(id);
+    if (!program) {
+      throw new NotFoundException(`Program with id ${id} not found`);
+    }
+    return this.programsRepository.remove(program);
+  }
+
+  async getWorkoutsByProgramId(programId: number) {
+    const result = await this.programsRepository
+      .createQueryBuilder('program')
+      .leftJoinAndSelect('program.workouts', 'workout')
+      .leftJoinAndSelect('workout.exercise', 'exercise')
+      .where('program.programId = :programId', { programId })
+      .getMany();
+
+    const groupedResults = result.reduce((result, program) => {
+      const programKey = `${program.programName}-${program.description}`;
+
+      if (!result[programKey]) {
+        result[programKey] = {
+          program: {
+            programName: program.programName,
+            description: program.description,
+          },
+          exercises: [],
+        };
+      }
+
+      program.workouts.forEach((workout) => {
+        result[programKey].exercises.push({
+          exerciseId: workout.exercise.exerciseId,
+          exerciseName: workout.exercise.exerciseName,
+          bodyPart: workout.exercise.bodyPart,
+          equipment: workout.exercise.equipment,
+          date: new Date(workout.date).toLocaleDateString(),
+        });
+      });
+
       return result;
-    }, new Map<string, { date: string; workoutName: string; workoutId: number; workouts: { workoutId: number;  exercises: any[]; }[] }>());
-    
-    const result = {
-      programId: workouts.programId,
-      programName: workouts.programName,
-      description: workouts.description,
-      startDate: workouts.startDate,
-      endDate: workouts.endDate,
-      workouts: [...processedWorkouts.values()],
-    };
-        
-    return result;
-    
-    
-    //     const groupedResults = workouts.reduce((result, item) => {
-    //     const programKey = `${item.program.programName}-${item.program.description}`;
-
-    //   if (!result[programKey]) {
-    //     result[programKey] = {
-    //       program: item.program,
-    //       exercises: [],
-    //     };
-    //   }
-
-    //   result[programKey].exercises.push({
-    //     exerciseId: item.exercise.exerciseId,
-    //     exerciseName: item.exercise.exerciseName,
-    //     bodyPart: item.exercise.bodyPart,
-    //     equipment: item.exercise.equipment,
-    //     date: item.date.toLocaleDateString(),
-    //   });
-
-    //   return result;
-    // }, {});
+    }, {});
 
     // const finalResult = Object.values(groupedResults);
     // return finalResult;
