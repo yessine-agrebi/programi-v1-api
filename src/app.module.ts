@@ -22,7 +22,6 @@ dotenvConfig({ path: '.env' });
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      // url: 'postgres://postgres:rami@localhost:5432/workout_typeorm',
       host: process.env.DATABASE_HOST,
       port: Number(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USERNAME,

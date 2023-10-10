@@ -48,8 +48,6 @@ export class SetsController {
     await this.setsService.remove(+id);
   }
 
-  @Get('exercise/:exerciseId')
-  getSetsByExerciseId(@Param('exerciseId') exerciseId: number) {
-    return this.setsService.getSetsByExerciseId(+exerciseId);
-  }
+  //@Get('exercise/:exerciseId')
+  
 }

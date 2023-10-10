@@ -1,3 +1,4 @@
+import { Exercise } from 'src/exercises/entities/exercise.entity';
 import { Workout } from 'src/workouts/entities/workout.entity';
 import {
   Column,
@@ -23,9 +24,12 @@ export class Set {
   @Column()
   setNum: number;
 
-  @ManyToOne(() => Workout, (workout) => workout.sets)
-  @JoinColumn({ name: 'workoutId' })
-  workout: Workout;
+  @ManyToOne(() => Exercise, (workout) => workout.sets)
+
+  @JoinColumn({ name: 'exerciseId' })
+  workout: Exercise;
+
+  sets: Set[];
 
   @Column()
   workoutId: number;

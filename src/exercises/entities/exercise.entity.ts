@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Workout } from 'src/workouts/entities/workout.entity';
+import { Set } from 'src/sets/entities/set.entity';
 
 @Entity()
 export class Exercise {
@@ -37,6 +38,9 @@ export class Exercise {
 
   @OneToMany(() => Workout, (workout) => workout.exercise)
   workouts: Workout[];
+
+  @OneToMany(() => Set, (set) => set.sets)
+  sets: Set[];
 
   @CreateDateColumn()
   createdAt: Date;

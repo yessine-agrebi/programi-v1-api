@@ -34,9 +34,6 @@ export class Workout {
   @Column({ type: 'date' })
   date: Date;
 
-  @OneToMany(() => Set, (set) => set.workout)
-  sets: Set[];
-
   @CreateDateColumn()
   createdAt: Date;
 
