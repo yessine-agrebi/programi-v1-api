@@ -1,14 +1,21 @@
-// import 
-export class CreateProgramDto {
+import { IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
 
+export class CreateProgramDto {
+  @IsString()
   programName: string;
 
-  description?: string;
+  @IsString()
+  @IsOptional()
+  description: string;
 
-  startDate?: Date;
+  @IsDateString()
+  @IsOptional()
+  startDate: Date;
 
-  endDate?: Date;
+  @IsDateString()
+  @IsOptional()
+  endDate: Date;
 
+  @IsInt()
   userId: number;
-
 }

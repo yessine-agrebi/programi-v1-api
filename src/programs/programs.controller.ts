@@ -6,8 +6,9 @@ import {
   Patch,
   Param,
   Delete,
-  BadRequestException,
   NotFoundException,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ProgramsService } from './programs.service';
 import { CreateProgramDto } from './dto/create-program.dto';
@@ -18,25 +19,17 @@ export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}
 
   @Post()
-  async create(@Body() createProgramDto: CreateProgramDto) {
-    const program = await this.programsService.create(createProgramDto);
-    if (!program) {
-      throw new BadRequestException('Error creating program');
-    }
-    return program;
+  createProgram(@Body() body: CreateProgramDto) {
+    return this.programsService.create(body);
   }
 
   @Get()
-  async findAll() {
-    const programs = await this.programsService.findAll();
-    if (!programs) {
-      throw new NotFoundException('Error finding programs');
-    }
-    return programs;
+  findAllPrograms() {
+    return this.programsService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
+  @Get('/:id')
+  async findOneProgram(@Param('id') id: string) {
     const program = await this.programsService.findOne(+id);
     if (!program) {
       throw new NotFoundException(`Error finding program with id ${id}`);
@@ -45,33 +38,29 @@ export class ProgramsController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateProgramDto: UpdateProgramDto,
-  ) {
-    const program = await this.programsService.update(+id, updateProgramDto);
-    if (!program) {
-      throw new NotFoundException(`Error updating program with id ${id}`);
-    }
-    return program;
+  updateProgram(@Param('id') id: string, @Body() body: UpdateProgramDto) {
+    return this.programsService.update(+id, body);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    const program = await this.programsService.remove(+id);
-    if (!program) {
-      throw new NotFoundException(`Error deleting program with id ${id}`);
-    }
-    return program;
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeProgram(@Param('id') id: string) {
+    await this.programsService.remove(+id);
   }
-  @Get('/workouts/:id')
-  getWorkoutsOfProgram(@Param('id') id: string) {
-    const workouts = this.programsService.getWorkoutsOfProgram(+id);
-    if (!workouts) {
-      throw new NotFoundException(
-        `Error finding workouts for program with id ${id}`,
-      );
-    }
-    return workouts;
+
+  @Get('/workouts/:programId')
+  getWorkoutsByProgramId(@Param('programId') programId: string) {
+    return this.programsService.getWorkoutsByProgramId(+programId);
   }
+
+  // @Get('/workouts/:id')
+  // getWorkoutsOfProgram(@Param('id') id: string) {
+  //   const workouts = this.programsService.getWorkoutsOfProgram(+id);
+  //   if (!workouts) {
+  //     throw new NotFoundException(
+  //       `Error finding workouts for program with id ${id}`,
+  //     );
+  //   }
+  //   return workouts;
+  // }
 }

@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  NotFoundException,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { SetsService } from './sets.service';
 import { CreateSetDto } from './dto/create-set.dto';
 import { UpdateSetDto } from './dto/update-set.dto';
@@ -8,25 +19,17 @@ export class SetsController {
   constructor(private readonly setsService: SetsService) {}
 
   @Post()
-  async create(@Body() createSetDto: CreateSetDto) {
-    const set = await this.setsService.create(createSetDto);
-    if (!set) {
-      throw new BadRequestException('Error creating set');
-    }
-    return set;
+  createSet(@Body() body: CreateSetDto) {
+    return this.setsService.create(body);
   }
 
   @Get()
-  async findAll() {
-    const sets = await this.setsService.findAll();
-    if (!sets) {
-      throw new NotFoundException('Error finding sets');
-    }
-    return sets;
+  findAllSets() {
+    return this.setsService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
+  @Get('/:id')
+  async findOneSet(@Param('id') id: string) {
     const set = await this.setsService.findOne(+id);
     if (!set) {
       throw new NotFoundException(`Error finding set with id ${id}`);
@@ -35,28 +38,18 @@ export class SetsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateSetDto: UpdateSetDto) {
-    const set = await this.setsService.update(+id, updateSetDto);
-    if (!set) {
-      throw new NotFoundException(`Error updating set with id ${id}`);
-    }
-    return set;
+  updateSet(@Param('id') id: string, @Body() body: UpdateSetDto) {
+    return this.setsService.update(+id, body);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    const set = await this.setsService.remove(+id);
-    if (!set) {
-      throw new NotFoundException(`Error deleting set with id ${id}`);
-    }
-    return set;
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeProgram(@Param('id') id: string) {
+    await this.setsService.remove(+id);
   }
+
   @Get('exercise/:exerciseId')
-  async getSetsByExerciseId(@Param('exerciseId') exerciseId: number) {
-    const setDetails = await this.setsService.getSetsByExerciseId(+exerciseId);
-    if (!setDetails) {
-      throw new NotFoundException(`Error getting sets for exercise with id ${exerciseId}`);
-    }
-    return setDetails;
+  getSetsByExerciseId(@Param('exerciseId') exerciseId: number) {
+    return this.setsService.getSetsByExerciseId(+exerciseId);
   }
 }

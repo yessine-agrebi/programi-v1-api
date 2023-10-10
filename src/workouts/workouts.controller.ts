@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  NotFoundException,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { WorkoutsService } from './workouts.service';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
@@ -8,25 +19,17 @@ export class WorkoutsController {
   constructor(private readonly workoutsService: WorkoutsService) {}
 
   @Post()
-  async create(@Body() createWorkoutDto: CreateWorkoutDto) {
-    const workout = await this.workoutsService.create(createWorkoutDto);
-    if (!workout) {
-      throw new BadRequestException('Error creating workout');
-    }
-    return workout;
+  createWorkout(@Body() body: CreateWorkoutDto) {
+    return this.workoutsService.create(body);
   }
 
   @Get()
-  async findAll() {
-    const workouts = await this.workoutsService.findAll();
-    if (!workouts) {
-      throw new NotFoundException('Error finding workouts');
-    }
-    return workouts;
+  findAllWorkouts() {
+    return this.workoutsService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
+  @Get('/:id')
+  async findOneWorkout(@Param('id') id: string) {
     const workout = await this.workoutsService.findOne(+id);
     if (!workout) {
       throw new NotFoundException(`Error finding workout with id ${id}`);
@@ -35,20 +38,13 @@ export class WorkoutsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateWorkoutDto: UpdateWorkoutDto) {
-    const workout = await this.workoutsService.update(+id, updateWorkoutDto);
-    if (!workout) {
-      throw new NotFoundException(`Error updating workout with id ${id}`);
-    }
-    return workout;
+  updateProgram(@Param('id') id: string, @Body() body: UpdateWorkoutDto) {
+    return this.workoutsService.update(+id, body);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    const workout = await this.workoutsService.remove(+id);
-    if (!workout) {
-      throw new NotFoundException(`Error deleting workout with id ${id}`);
-    }
-    return workout;
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeProgram(@Param('id') id: string) {
+    await this.workoutsService.remove(+id);
   }
 }

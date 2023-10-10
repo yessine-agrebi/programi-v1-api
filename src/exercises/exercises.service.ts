@@ -1,29 +1,66 @@
-import { Injectable } from '@nestjs/common';
-import { UpdateExerciseDto } from './dto/update-exercise.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateExerciseDto } from './dto/create-exercise.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Exercise } from './entities/exercise.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ExercisesService {
-  constructor(private readonly prisma: PrismaService) {}
-  create(createExerciseDto: CreateExerciseDto) {
-    return this.prisma.exercise.create({ data: createExerciseDto });
+  constructor(
+    @InjectRepository(Exercise)
+    private exercisesRepository: Repository<Exercise>,
+    private usersService: UsersService,
+  ) {}
+
+  async create(attributes: Partial<Exercise>) {
+    const user = await this.usersService.findOne(attributes.userId);
+    if (!user) {
+      throw new NotFoundException(
+        `User with id ${attributes.userId} not found`,
+      );
+    }
+    try {
+      const exercise = this.exercisesRepository.create(attributes);
+      return await this.exercisesRepository.save(exercise);
+    } catch (error) {
+      throw error;
+    }
   }
-  
 
   findAll() {
-    return this.prisma.exercise.findMany();
+    return this.exercisesRepository.find();
   }
 
   findOne(id: number) {
-    return this.prisma.exercise.findUnique({ where: { exerciseId: id } });
+    return this.exercisesRepository.findOneBy({ exerciseId: id });
   }
 
-  update(id: number, updateExerciseDto: UpdateExerciseDto) {
-    return this.prisma.exercise.update({ where: { exerciseId: id }, data: updateExerciseDto });
+  async update(id: number, attributes: Partial<Exercise>) {
+    const user = await this.usersService.findOne(attributes.userId);
+    if (!user) {
+      throw new NotFoundException(
+        `User with id ${attributes.userId} not found`,
+      );
+    }
+    try {
+      const exercise = await this.exercisesRepository.findOneBy({
+        exerciseId: id,
+      });
+      if (!exercise) {
+        throw new NotFoundException(`Exercise with id ${id} not found`);
+      }
+      Object.assign(exercise, attributes);
+      return this.exercisesRepository.save(exercise);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.exercise.delete({ where: { exerciseId: id } });
+  async remove(id: number) {
+    const exercise = await this.findOne(id);
+    if (!exercise) {
+      throw new NotFoundException(`Exercise with id ${id} not found`);
+    }
+    return this.exercisesRepository.remove(exercise);
   }
 }

@@ -1,84 +1,101 @@
-import { Body, Get, Injectable, Post } from '@nestjs/common';
-import { CreateProgramDto } from './dto/create-program.dto';
-import { UpdateProgramDto } from './dto/update-program.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Program } from './entities/program.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProgramsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectRepository(Program) private programsRepository: Repository<Program>,
+    private usersService: UsersService,
+  ) {}
 
-  create(createProgramDto: CreateProgramDto) {
+  async create(attributes: Partial<Program>) {
+    const user = await this.usersService.findOne(attributes.userId);
+    if (!user) {
+      throw new NotFoundException(
+        `User with id ${attributes.userId} not found`,
+      );
+    }
     try {
-      return this.prisma.program.create({ data: createProgramDto });
+      const program = this.programsRepository.create(attributes);
+      return await this.programsRepository.save(program);
     } catch (error) {
-      console.log(error);
-      throw new Error('Error creating program');
+      throw error;
     }
   }
+
   findAll() {
-    return this.prisma.program.findMany();
+    return this.programsRepository.find();
   }
 
   findOne(id: number) {
-    return this.prisma.program.findUnique({ where: { programId: id } });
+    return this.programsRepository.findOneBy({ programId: id });
   }
 
-  update(id: number, updateProgramDto: UpdateProgramDto) {
-    return this.prisma.program.update({
-      where: { programId: id },
-      data: updateProgramDto,
-    });
-  }
-
-  remove(id: number) {
-    return this.prisma.program.delete({ where: { programId: id } });
-  }
-  
-  async getWorkoutsOfProgram(id: number) {
-    const result = await this.prisma.workout.findMany({
-      select: {
-        program: {
-          select: {
-            programName: true,
-            description: true,
-          },
-        },
-        exercise: {
-          select: {
-            exerciseId: true,
-            exerciseName: true,
-            bodyPart: true,
-            equipment: true,
-          },
-        },
-        date: true,
-      },
-      where: {
+  async update(id: number, attributes: Partial<Program>) {
+    const user = await this.usersService.findOne(attributes.userId);
+    if (!user) {
+      throw new NotFoundException(
+        `User with id ${attributes.userId} not found`,
+      );
+    }
+    try {
+      const program = await this.programsRepository.findOneBy({
         programId: id,
-      },
-    });
-
-    const groupedResults = result.reduce((result, item) => {
-    const programKey = `${item.program.programName}-${item.program.description}`;
-
-  if (!result[programKey]) {
-    result[programKey] = {
-      program: item.program,
-      exercises: [],
-    };
+      });
+      if (!program) {
+        throw new NotFoundException(`Program with id ${id} not found`);
+      }
+      Object.assign(program, attributes);
+      return this.programsRepository.save(program);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  result[programKey].exercises.push({
-    exerciseId: item.exercise.exerciseId,
-    exerciseName: item.exercise.exerciseName,
-    bodyPart: item.exercise.bodyPart,
-    equipment: item.exercise.equipment,
-    date: item.date.toLocaleDateString(),
-  });
+  async remove(id: number) {
+    const program = await this.findOne(id);
+    if (!program) {
+      throw new NotFoundException(`Program with id ${id} not found`);
+    }
+    return this.programsRepository.remove(program);
+  }
 
-  return result;
-}, {});
+  async getWorkoutsByProgramId(programId: number) {
+    const result = await this.programsRepository
+      .createQueryBuilder('program')
+      .leftJoinAndSelect('program.workouts', 'workout')
+      .leftJoinAndSelect('workout.exercise', 'exercise')
+      .where('program.programId = :programId', { programId })
+      .getMany();
 
+    const groupedResults = result.reduce((result, program) => {
+      const programKey = `${program.programName}-${program.description}`;
+
+      if (!result[programKey]) {
+        result[programKey] = {
+          program: {
+            programName: program.programName,
+            description: program.description,
+          },
+          exercises: [],
+        };
+      }
+
+      program.workouts.forEach((workout) => {
+        result[programKey].exercises.push({
+          exerciseId: workout.exercise.exerciseId,
+          exerciseName: workout.exercise.exerciseName,
+          bodyPart: workout.exercise.bodyPart,
+          equipment: workout.exercise.equipment,
+          date: new Date(workout.date).toLocaleDateString(),
+        });
+      });
+
+      return result;
+    }, {});
 
     const finalResult = Object.values(groupedResults);
     return finalResult;
