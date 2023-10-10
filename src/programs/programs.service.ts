@@ -63,41 +63,5 @@ export class ProgramsService {
     return this.programsRepository.remove(program);
   }
 
-  async getWorkoutsByProgramId(programId: number) {
-    const result = await this.programsRepository
-      .createQueryBuilder('program')
-      .leftJoinAndSelect('program.workouts', 'workout')
-      .leftJoinAndSelect('workout.exercise', 'exercise')
-      .where('program.programId = :programId', { programId })
-      .getMany();
-
-    const groupedResults = result.reduce((result, program) => {
-      const programKey = `${program.programName}-${program.description}`;
-
-      if (!result[programKey]) {
-        result[programKey] = {
-          program: {
-            programName: program.programName,
-            description: program.description,
-          },
-          exercises: [],
-        };
-      }
-
-      program.workouts.forEach((workout) => {
-        result[programKey].exercises.push({
-          exerciseId: workout.exercise.exerciseId,
-          exerciseName: workout.exercise.exerciseName,
-          bodyPart: workout.exercise.bodyPart,
-          equipment: workout.exercise.equipment,
-          date: new Date(workout.date).toLocaleDateString(),
-        });
-      });
-
-      return result;
-    }, {});
-
-    // const finalResult = Object.values(groupedResults);
-    // return finalResult;
-  }
+ 
 }

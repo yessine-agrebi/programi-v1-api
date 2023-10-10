@@ -14,12 +14,6 @@ export class WorkoutsService {
   ) {}
 
   async create(attributes: Partial<Workout>) {
-    const exercise = await this.exercisesService.findOne(attributes.exerciseId);
-    if (!exercise) {
-      throw new NotFoundException(
-        `Exercise with id ${attributes.exerciseId} not found`,
-      );
-    }
     const program = await this.programsService.findOne(attributes.programId);
     if (!program) {
       throw new NotFoundException(
@@ -43,12 +37,7 @@ export class WorkoutsService {
   }
 
   async update(id: number, attributes: Partial<Workout>) {
-    const exercise = await this.exercisesService.findOne(attributes.exerciseId);
-    if (!exercise) {
-      throw new NotFoundException(
-        `Exercise with id ${attributes.exerciseId} not found`,
-      );
-    }
+    
     const program = await this.programsService.findOne(attributes.programId);
     if (!program) {
       throw new NotFoundException(

@@ -24,15 +24,11 @@ export class Workout {
   @Column()
   programId: number;
 
-  @ManyToOne(() => Exercise, (exercise) => exercise.workouts)
-  @JoinColumn({ name: 'exerciseId' })
-  exercise: Exercise;
-
-  @Column()
-  exerciseId: number;
-
   @Column({ type: 'date' })
   date: Date;
+
+  @OneToMany(() => Exercise, (exercise) => exercise.workout)  // Define the relationship with Exercise
+  exercises: Exercise[];
 
   @CreateDateColumn()
   createdAt: Date;

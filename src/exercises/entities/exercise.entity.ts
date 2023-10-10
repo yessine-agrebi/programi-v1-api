@@ -30,14 +30,18 @@ export class Exercise {
   @JoinColumn({ name: 'userId' })
   user: User;
 
+  @ManyToOne(() => Workout, (workout) => workout.exercises, {nullable: true})
+  @JoinColumn({ name: 'workoutId' })
+  workout: Workout;
+
+  @Column({ nullable: true })
+  workoutId: number;
+
   @Column()
   userId: number;
 
   @Column({ nullable: true })
   bestSetId?: number;
-
-  @OneToMany(() => Workout, (workout) => workout.exercise)
-  workouts: Workout[];
 
   @OneToMany(() => Set, (set) => set.sets)
   sets: Set[];

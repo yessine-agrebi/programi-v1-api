@@ -48,10 +48,8 @@ export class ProgramsController {
     await this.programsService.remove(+id);
   }
 
-  @Get('/workouts/:programId')
-  getWorkoutsByProgramId(@Param('programId') programId: string) {
-    return this.programsService.getWorkoutsByProgramId(+programId);
-  }
+  //@Get('/workouts/:programId')
+  
 
   // @Get('/workouts/:id')
   // getWorkoutsOfProgram(@Param('id') id: string) {
