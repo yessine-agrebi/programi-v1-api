@@ -19,12 +19,11 @@ import { Program } from './programs/entities/program.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      // url: 'postgres://postgres:rami@localhost:5432/workout_typeorm',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'rami',
-      database: 'workout_typeorm',
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USERNAME,
+      password: String(process.env.DATABASE_PASSWORD),
+      database: process.env.DATABASE_NAME,
       // entities: [__dirname + '/**/*.entity{.ts,.js}'],
       entities: [User, Exercise, Workout, Set, Program],
       //! DANGER: in production set synchronize to false
