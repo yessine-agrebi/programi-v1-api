@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Exercise } from './entities/exercise.entity';
 import { UsersService } from 'src/users/users.service';
 
@@ -62,5 +62,40 @@ export class ExercisesService {
       throw new NotFoundException(`Exercise with id ${id} not found`);
     }
     return this.exercisesRepository.remove(exercise);
+  }
+  //update workout_id for many exercises
+  async updateWorkoutIdForManyExercises(
+    workout_id: number,
+    exercise_ids: number[],
+  ) {
+    const exercises = await this.exercisesRepository.find({
+      where: { exercise_id: In(exercise_ids) },
+    });
+    if (!exercises) {
+      throw new NotFoundException(
+        `Exercises with ids ${exercise_ids} not found`,
+      );
+    }
+    try {
+      exercises.forEach((exercise) => {
+        exercise.workout_id = workout_id;
+      });
+      return this.exercisesRepository.save(exercises);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //get all exercises for a workout
+  async getExercisesForWorkout(workout_id: number) {
+    const exercises = await this.exercisesRepository.find({
+      where: { workout_id: workout_id },
+    });
+    if (!exercises) {
+      throw new NotFoundException(
+        `Exercises for workout with id ${workout_id} not found`,
+      );
+    }
+    return exercises;
   }
 }

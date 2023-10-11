@@ -41,7 +41,7 @@ export class Exercise {
   user_id: number;
 
   @Column({ nullable: true })
-  bestSetId?: number;
+  best_set_id?: number;
 
   @OneToMany(() => Set, (set) => set.sets)
   sets: Set[];
