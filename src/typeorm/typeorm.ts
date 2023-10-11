@@ -12,7 +12,7 @@ const config = {
   password: `${process.env.DATABASE_PASSWORD}`,
   database: `${process.env.DATABASE_NAME}`,
   entities: ['dist/**/*.entity{.ts,.js}'],
-  migrations: ['dist/src/typeorm/migrations/*{.ts,.js}'],
+  migrations: ['dist/typeorm/migrations/*{.ts,.js}'],
   autoLoadEntities: true,
   synchronize: false,
 };

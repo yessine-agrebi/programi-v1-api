@@ -32,7 +32,7 @@ export class Program {
   workouts: Workout[];
 
   @ManyToOne(() => User, (user) => user.programs)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @Column()
