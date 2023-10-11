@@ -49,7 +49,6 @@ export class ProgramsController {
   }
 
   //@Get('/workouts/:programId')
-  
 
   // @Get('/workouts/:id')
   // getWorkoutsOfProgram(@Param('id') id: string) {

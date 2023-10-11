@@ -63,5 +63,4 @@ export class SetsService {
     }
     return this.setsRepository.remove(set);
   }
-
 }

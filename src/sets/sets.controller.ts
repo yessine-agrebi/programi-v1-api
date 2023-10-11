@@ -49,5 +49,4 @@ export class SetsController {
   }
 
   //@Get('exercise/:exerciseId')
-  
 }

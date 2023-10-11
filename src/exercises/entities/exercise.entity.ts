@@ -30,7 +30,7 @@ export class Exercise {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Workout, (workout) => workout.exercises, {nullable: true})
+  @ManyToOne(() => Workout, (workout) => workout.exercises, { nullable: true })
   @JoinColumn({ name: 'workout_id' })
   workout: Workout;
 

@@ -10,7 +10,6 @@ import {
 } from 'typeorm';
 import { Exercise } from 'src/exercises/entities/exercise.entity';
 import { Program } from 'src/programs/entities/program.entity';
-import { Set } from 'src/sets/entities/set.entity';
 
 @Entity()
 export class Workout {
@@ -30,7 +29,7 @@ export class Workout {
   @Column({ type: 'date' })
   date: Date;
 
-  @OneToMany(() => Exercise, (exercise) => exercise.workout)  // Define the relationship with Exercise
+  @OneToMany(() => Exercise, (exercise) => exercise.workout) // Define the relationship with Exercise
   exercises: Exercise[];
 
   @CreateDateColumn()

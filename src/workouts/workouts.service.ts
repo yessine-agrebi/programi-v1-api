@@ -37,7 +37,6 @@ export class WorkoutsService {
   }
 
   async update(id: number, attributes: Partial<Workout>) {
-    
     const program = await this.programsService.findOne(attributes.programId);
     if (!program) {
       throw new NotFoundException(
