@@ -25,7 +25,7 @@
     "migration:generate": "cross-var npm run typeorm -- -d ./src/typeorm/typeorm.ts migration:generate ./src/typeorm/migrations/$npm_config_name",
     "migration:create": "cross-var npm run typeorm -- migration:create ./src/typeorm/migrations/$npm_config_name",
     "migration:revert": "npm run typeorm -- -d ./src/typeorm/typeorm.ts migration:revert",
-    "seed:sync": "ts-node -r tsconfig-paths/register ./src/typeorm/seeders/seed.helper.ts"
+    "seed:sync": "ts-node -r tsconfig-paths/register ./src/typeorm/seed.helper.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

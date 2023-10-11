@@ -1,5 +1,8 @@
 import { Exercise } from 'src/exercises/entities/exercise.entity';
 import {
+  AfterInsert,
+  AfterRemove,
+  AfterUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -40,4 +43,19 @@ export class Set {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @AfterInsert()
+  async afterInsert() {
+    console.log('🚀 -----New set created----- ✅');
+  }
+
+  @AfterUpdate()
+  async afterUpdate() {
+    console.log('🚀 -----Set updated----- ✅');
+  }
+
+  @AfterRemove()
+  async afterRemove() {
+    console.log('🚀 -----Set removed----- ✅');
+  }
 }
