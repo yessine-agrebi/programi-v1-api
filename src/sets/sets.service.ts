@@ -13,10 +13,10 @@ export class SetsService {
   ) {}
 
   async create(attributes: Partial<Set>) {
-    const workout = await this.workoutsService.findOne(attributes.workoutId);
+    const workout = await this.workoutsService.findOne(attributes.workout_id);
     if (!workout) {
       throw new NotFoundException(
-        `Workout with id ${attributes.workoutId} not found`,
+        `Workout with id ${attributes.workout_id} not found`,
       );
     }
     try {
@@ -32,19 +32,19 @@ export class SetsService {
   }
 
   findOne(id: number) {
-    return this.setsRepository.findOneBy({ setId: id });
+    return this.setsRepository.findOneBy({ set_id: id });
   }
 
   async update(id: number, attributes: Partial<Set>) {
-    const workout = await this.workoutsService.findOne(attributes.workoutId);
+    const workout = await this.workoutsService.findOne(attributes.workout_id);
     if (!workout) {
       throw new NotFoundException(
-        `Workout with id ${attributes.workoutId} not found`,
+        `Workout with id ${attributes.workout_id} not found`,
       );
     }
     try {
       const set = await this.setsRepository.findOneBy({
-        setId: id,
+        set_id: id,
       });
       if (!set) {
         throw new NotFoundException(`Set with id ${id} not found`);

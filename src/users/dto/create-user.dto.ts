@@ -16,10 +16,10 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
-  firstName: string;
+  first_name: string;
 
   @IsString()
-  lastName: string;
+  last_name: string;
 
   @IsInt()
   @IsOptional()

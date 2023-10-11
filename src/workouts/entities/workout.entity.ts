@@ -15,14 +15,17 @@ import { Set } from 'src/sets/entities/set.entity';
 @Entity()
 export class Workout {
   @PrimaryGeneratedColumn()
-  workoutId: number;
+  workout_id: number;
 
   @ManyToOne(() => Program, (program) => program.workouts)
-  @JoinColumn({ name: 'programId' })
+  @JoinColumn({ name: 'program_id' })
   program: Program;
 
   @Column()
-  programId: number;
+  workout_name: string;
+
+  @Column()
+  program_id: number;
 
   @Column({ type: 'date' })
   date: Date;
@@ -31,8 +34,8 @@ export class Workout {
   exercises: Exercise[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 }

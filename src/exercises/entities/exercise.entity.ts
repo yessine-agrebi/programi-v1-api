@@ -15,30 +15,30 @@ import { Set } from 'src/sets/entities/set.entity';
 @Entity()
 export class Exercise {
   @PrimaryGeneratedColumn()
-  exerciseId: number;
+  exercise_id: number;
 
   @Column()
-  exerciseName: string;
+  exercise_name: string;
 
   @Column()
-  bodyPart: string;
+  body_part: string;
 
   @Column()
   equipment: string;
 
   @ManyToOne(() => User, (user) => user.exercises)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @ManyToOne(() => Workout, (workout) => workout.exercises, {nullable: true})
-  @JoinColumn({ name: 'workoutId' })
+  @JoinColumn({ name: 'workout_id' })
   workout: Workout;
 
   @Column({ nullable: true })
-  workoutId: number;
+  workout_id: number;
 
   @Column()
-  userId: number;
+  user_id: number;
 
   @Column({ nullable: true })
   bestSetId?: number;
@@ -47,8 +47,8 @@ export class Exercise {
   sets: Set[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 }

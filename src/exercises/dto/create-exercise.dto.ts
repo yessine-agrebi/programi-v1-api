@@ -2,18 +2,18 @@ import { IsString, IsInt, IsOptional } from 'class-validator';
 
 export class CreateExerciseDto {
   @IsString()
-  exerciseName: string;
+  exercise_name: string;
 
   @IsString()
-  bodyPart: string;
+  body_part: string;
 
   @IsString()
   equipment: string;
 
   @IsInt()
-  userId: number;
+  user_id: number;
 
   @IsInt()
   @IsOptional()
-  bestSetId?: number;
+  best_set_id?: number;
 }

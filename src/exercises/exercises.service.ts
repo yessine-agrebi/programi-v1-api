@@ -13,10 +13,10 @@ export class ExercisesService {
   ) {}
 
   async create(attributes: Partial<Exercise>) {
-    const user = await this.usersService.findOne(attributes.userId);
+    const user = await this.usersService.findOne(attributes.user_id);
     if (!user) {
       throw new NotFoundException(
-        `User with id ${attributes.userId} not found`,
+        `User with id ${attributes.user_id} not found`,
       );
     }
     try {
@@ -32,19 +32,19 @@ export class ExercisesService {
   }
 
   findOne(id: number) {
-    return this.exercisesRepository.findOneBy({ exerciseId: id });
+    return this.exercisesRepository.findOneBy({ exercise_id: id });
   }
 
   async update(id: number, attributes: Partial<Exercise>) {
-    const user = await this.usersService.findOne(attributes.userId);
+    const user = await this.usersService.findOne(attributes.user_id);
     if (!user) {
       throw new NotFoundException(
-        `User with id ${attributes.userId} not found`,
+        `User with id ${attributes.user_id} not found`,
       );
     }
     try {
       const exercise = await this.exercisesRepository.findOneBy({
-        exerciseId: id,
+        exercise_id: id,
       });
       if (!exercise) {
         throw new NotFoundException(`Exercise with id ${id} not found`);

@@ -12,10 +12,10 @@ export class ProgramsService {
   ) {}
 
   async create(attributes: Partial<Program>) {
-    const user = await this.usersService.findOne(attributes.userId);
+    const user = await this.usersService.findOne(attributes.user_id);
     if (!user) {
       throw new NotFoundException(
-        `User with id ${attributes.userId} not found`,
+        `User with id ${attributes.user_id} not found`,
       );
     }
     try {
@@ -31,19 +31,19 @@ export class ProgramsService {
   }
 
   findOne(id: number) {
-    return this.programsRepository.findOneBy({ programId: id });
+    return this.programsRepository.findOneBy({ program_id: id });
   }
 
   async update(id: number, attributes: Partial<Program>) {
-    const user = await this.usersService.findOne(attributes.userId);
+    const user = await this.usersService.findOne(attributes.user_id);
     if (!user) {
       throw new NotFoundException(
-        `User with id ${attributes.userId} not found`,
+        `User with id ${attributes.user_id} not found`,
       );
     }
     try {
       const program = await this.programsRepository.findOneBy({
-        programId: id,
+        program_id: id,
       });
       if (!program) {
         throw new NotFoundException(`Program with id ${id} not found`);

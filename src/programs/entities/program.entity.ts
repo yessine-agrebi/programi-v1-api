@@ -14,19 +14,19 @@ import { Workout } from 'src/workouts/entities/workout.entity';
 @Entity()
 export class Program {
   @PrimaryGeneratedColumn()
-  programId: number;
+  program_id: number;
 
   @Column()
-  programName: string;
+  program_name: string;
 
   @Column({ nullable: true })
   description: string;
 
   @Column({ type: 'date', nullable: true })
-  startDate: Date;
+  start_date: Date;
 
   @Column({ type: 'date', nullable: true })
-  endDate: Date;
+  end_date: Date;
 
   @OneToMany(() => Workout, (workout) => workout.program)
   workouts: Workout[];
@@ -36,11 +36,11 @@ export class Program {
   user: User;
 
   @Column()
-  userId: number;
+  user_id: number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 }

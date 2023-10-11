@@ -15,7 +15,7 @@ import { Program } from 'src/programs/entities/program.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  userId: number;
+  user_id: number;
 
   @Column({ unique: true })
   email: string;
@@ -24,10 +24,10 @@ export class User {
   password: string;
 
   @Column()
-  firstName: string;
+  first_name: string;
 
   @Column()
-  lastName: string;
+  last_name: string;
 
   @Column({ nullable: true })
   height?: number;
@@ -45,10 +45,10 @@ export class User {
   exercises: Exercise[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 
   @AfterInsert()
   async afterInsert() {
