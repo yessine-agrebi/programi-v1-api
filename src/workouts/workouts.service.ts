@@ -14,10 +14,10 @@ export class WorkoutsService {
   ) {}
 
   async create(attributes: Partial<Workout>) {
-    const program = await this.programsService.findOne(attributes.programId);
+    const program = await this.programsService.findOne(attributes.program_id);
     if (!program) {
       throw new NotFoundException(
-        `Program with id ${attributes.programId} not found`,
+        `Program with id ${attributes.program_id} not found`,
       );
     }
     try {
@@ -33,19 +33,19 @@ export class WorkoutsService {
   }
 
   findOne(id: number) {
-    return this.workoutsRepository.findOneBy({ workoutId: id });
+    return this.workoutsRepository.findOneBy({ workout_id: id });
   }
 
   async update(id: number, attributes: Partial<Workout>) {
-    const program = await this.programsService.findOne(attributes.programId);
+    const program = await this.programsService.findOne(attributes.program_id);
     if (!program) {
       throw new NotFoundException(
-        `Program with id ${attributes.programId} not found`,
+        `Program with id ${attributes.program_id} not found`,
       );
     }
     try {
       const workout = await this.workoutsRepository.findOneBy({
-        workoutId: id,
+        workout_id: id,
       });
       if (!workout) {
         throw new NotFoundException(`Workout with id ${id} not found`);
