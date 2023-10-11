@@ -24,7 +24,7 @@ export class ExercisesController {
   }
 
   @Get()
-  findAllExercises(){
+  findAllExercises() {
     return this.exercisesService.findAll();
   }
 
@@ -52,8 +52,14 @@ export class ExercisesController {
     return this.exercisesService.getExercisesForWorkout(+id);
   }
   @Patch('/:workout_id/:ids')
-  async updateWorkoutIdForManyExercises(@Param('workout_id') workout_id: string, @Param('ids') ids: string){
+  async updateWorkoutIdForManyExercises(
+    @Param('workout_id') workout_id: string,
+    @Param('ids') ids: string,
+  ) {
     const parsedIds: number[] = JSON.parse(ids).map(Number);
-    return this.exercisesService.updateWorkoutIdForManyExercises(+workout_id , parsedIds);
+    return this.exercisesService.updateWorkoutIdForManyExercises(
+      +workout_id,
+      parsedIds,
+    );
   }
 }
