@@ -7,6 +7,9 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
+  AfterInsert,
+  AfterUpdate,
+  AfterRemove,
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Workout } from 'src/workouts/entities/workout.entity';
@@ -43,4 +46,19 @@ export class Program {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @AfterInsert()
+  async afterInsert() {
+    console.log('🚀 -----New program created----- ✅');
+  }
+
+  @AfterUpdate()
+  async afterUpdate() {
+    console.log('🚀 -----Program updated----- ✅');
+  }
+
+  @AfterRemove()
+  async afterRemove() {
+    console.log('🚀 -----Program removed----- ✅');
+  }
 }

@@ -1,12 +1,12 @@
-import { DataSource } from 'typeorm';
-import { seedData } from './seed-data';
-import { AppModule } from '../../app.module';
 import { NestFactory } from '@nestjs/core';
+import { DataSource } from 'typeorm';
+import { AppModule } from 'src/app.module';
+import { databaseSeeder } from './seeders';
 
 async function runSeeder() {
   const app = await NestFactory.create(AppModule);
   const dataSource = app.get(DataSource);
-  await seedData(dataSource);
+  await databaseSeeder(dataSource);
   await app.close();
 }
 runSeeder();
