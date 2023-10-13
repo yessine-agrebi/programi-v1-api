@@ -12,7 +12,7 @@ export async function seedExercises(
   for (let i = 0; i < 10; i++) {
     // Select a random user from the users array.
     const user = users[Math.floor(Math.random() * users.length)];
-    const exercise = generateExercise(user.user_id);
+    const exercise = generateExercise(user.userId);
 
     const _exercise = exerciseRepository.create(exercise);
     await exerciseRepository.save(_exercise);

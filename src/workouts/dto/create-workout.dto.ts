@@ -2,8 +2,8 @@ import { IsDateString, IsInt } from 'class-validator';
 
 export class CreateWorkoutDto {
   @IsInt()
-  program_id: number;
-
+  programId: number;
+  workout_name: string;
   @IsDateString()
   date: Date;
 }

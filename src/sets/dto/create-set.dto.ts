@@ -21,14 +21,14 @@ export class CreateSetDto {
   @IsNotEmpty()
   @IsInt()
   @IsPositive()
-  set_num: number;
+  setNum: number;
 
   @IsNotEmpty()
   @IsInt()
   @IsPositive()
-  workout_id: number;
+  exerciseId: number;
 
   @IsBoolean()
   @IsOptional()
-  is_best_set: boolean;
+  isBestSet: boolean;
 }
