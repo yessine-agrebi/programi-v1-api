@@ -8,12 +8,12 @@ export async function seedData(dataSource: DataSource): Promise<void> {
   const exerciseRepository = dataSource.getRepository(Exercise);
 
   for (let i = 0; i < 10; i++) {
-    const first_name = name.firstName();
-    const last_name = name.lastName();
+    const firstName = name.firstName();
+    const lastName = name.lastName();
     const user = {
-      email: internet.email(first_name, last_name),
-      first_name,
-      last_name,
+      email: internet.email(firstName, lastName),
+      firstName,
+      lastName,
       password: internet.password(),
       height: Math.floor(Math.random() * 250),
       weight: Math.floor(Math.random() * 250),
@@ -31,10 +31,10 @@ export async function seedData(dataSource: DataSource): Promise<void> {
 
     // Create a new exercise and associate it with the user.
     const exercise = {
-      exercise_name: lorem.words(3),
-      body_part: lorem.word(),
+      exerciseName: lorem.words(3),
+      bodyPart: lorem.word(),
       equipment: lorem.word(),
-      user_id: _user.user_id, // Associate the exercise with the user.
+      userId: _user.userId, // Associate the exercise with the user.
     };
 
     const _exercise = exerciseRepository.create(exercise);

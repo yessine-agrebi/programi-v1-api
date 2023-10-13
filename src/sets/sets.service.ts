@@ -2,21 +2,21 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Set } from './entities/set.entity';
-import { WorkoutsService } from 'src/workouts/workouts.service';
+import { ExercisesService } from 'src/exercises/exercises.service';
 // import { format } from 'sql-formatter';
 
 @Injectable()
 export class SetsService {
   constructor(
     @InjectRepository(Set) private setsRepository: Repository<Set>,
-    private workoutsService: WorkoutsService,
+    private exerciseService: ExercisesService,
   ) {}
 
   async create(attributes: Partial<Set>) {
-    const workout = await this.workoutsService.findOne(attributes.workout_id);
+    const workout = await this.exerciseService.findOne(attributes.exerciseId);
     if (!workout) {
       throw new NotFoundException(
-        `Workout with id ${attributes.workout_id} not found`,
+        `Workout with id ${attributes.exerciseId} not found`,
       );
     }
     try {
@@ -32,19 +32,19 @@ export class SetsService {
   }
 
   findOne(id: number) {
-    return this.setsRepository.findOneBy({ set_id: id });
+    return this.setsRepository.findOneBy({ setId: id });
   }
 
   async update(id: number, attributes: Partial<Set>) {
-    const workout = await this.workoutsService.findOne(attributes.workout_id);
+    const workout = await this.exerciseService.findOne(attributes.exerciseId);
     if (!workout) {
       throw new NotFoundException(
-        `Workout with id ${attributes.workout_id} not found`,
+        `Workout with id ${attributes.exerciseId} not found`,
       );
     }
     try {
       const set = await this.setsRepository.findOneBy({
-        set_id: id,
+        setId: id,
       });
       if (!set) {
         throw new NotFoundException(`Set with id ${id} not found`);

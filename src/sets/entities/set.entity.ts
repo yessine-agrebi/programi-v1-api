@@ -11,8 +11,8 @@ import {
 
 @Entity()
 export class Set {
-  @PrimaryGeneratedColumn()
-  set_id: number;
+  @PrimaryGeneratedColumn({ name: 'set_id'})
+  setId: number;
 
   @Column({ type: 'float' })
   weight: number;
@@ -20,8 +20,8 @@ export class Set {
   @Column()
   reps: number;
 
-  @Column()
-  set_num: number;
+  @Column({ name: 'set_num'})
+  setNum: number;
 
   @ManyToOne(() => Exercise, (workout) => workout.sets)
   @JoinColumn({ name: 'exercise_id' })
@@ -29,15 +29,15 @@ export class Set {
 
   sets: Set[];
 
-  @Column()
-  workout_id: number;
+  @Column({ nullable: true, name: 'exercise_id' })
+  exerciseId: number;
 
-  @Column({ default: false })
-  is_best_set: boolean;
+  @Column({ default: false, name: 'is_best_set' })
+  isBestSet: boolean;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at'})
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({ name: 'updated_at'})
+  updatedAat: Date;
 }
