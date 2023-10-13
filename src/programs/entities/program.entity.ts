@@ -16,30 +16,30 @@ import { Workout } from 'src/workouts/entities/workout.entity';
 
 @Entity()
 export class Program {
-  @PrimaryGeneratedColumn()
-  program_id: number;
+  @PrimaryGeneratedColumn({ name: 'program_id' })
+  programId: number;
 
-  @Column()
-  program_name: string;
+  @Column({ name: 'program_name', nullable: false })
+  programName: string;
 
   @Column({ nullable: true })
   description: string;
 
-  @Column({ type: 'date', nullable: true })
-  start_date: Date;
+  @Column({ type: 'date', nullable: true, name: 'start_date' })
+  startDate: Date;
 
-  @Column({ type: 'date', nullable: true })
-  end_date: Date;
+  @Column({ type: 'date', nullable: true, name: 'end_date' })
+  endDate: Date;
 
   @OneToMany(() => Workout, (workout) => workout.program)
   workouts: Workout[];
 
   @ManyToOne(() => User, (user) => user.programs)
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column()
-  user_id: number;
+  @Column('user_id')
+  userId: number;
 
   @CreateDateColumn()
   created_at: Date;

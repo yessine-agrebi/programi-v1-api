@@ -13,10 +13,10 @@ export class ExercisesService {
   ) {}
 
   async create(attributes: Partial<Exercise>) {
-    const user = await this.usersService.findOne(attributes.user_id);
+    const user = await this.usersService.findOne(attributes.userId);
     if (!user) {
       throw new NotFoundException(
-        `User with id ${attributes.user_id} not found`,
+        `User with id ${attributes.userId} not found`,
       );
     }
     try {
@@ -32,19 +32,19 @@ export class ExercisesService {
   }
 
   findOne(id: number) {
-    return this.exercisesRepository.findOneBy({ exercise_id: id });
+    return this.exercisesRepository.findOneBy({ exerciseId: id });
   }
 
   async update(id: number, attributes: Partial<Exercise>) {
-    const user = await this.usersService.findOne(attributes.user_id);
+    const user = await this.usersService.findOne(attributes.userId);
     if (!user) {
       throw new NotFoundException(
-        `User with id ${attributes.user_id} not found`,
+        `User with id ${attributes.userId} not found`,
       );
     }
     try {
       const exercise = await this.exercisesRepository.findOneBy({
-        exercise_id: id,
+        exerciseId: id,
       });
       if (!exercise) {
         throw new NotFoundException(`Exercise with id ${id} not found`);
@@ -63,13 +63,13 @@ export class ExercisesService {
     }
     return this.exercisesRepository.remove(exercise);
   }
-  //update workout_id for many exercises
+  //update workoutId for many exercises
   async updateWorkoutIdForManyExercises(
-    workout_id: number,
+    workoutId: number,
     exercise_ids: number[],
   ) {
     const exercises = await this.exercisesRepository.find({
-      where: { exercise_id: In(exercise_ids) },
+      where: { exerciseId: In(exercise_ids) },
     });
     if (!exercises) {
       throw new NotFoundException(
@@ -78,7 +78,7 @@ export class ExercisesService {
     }
     try {
       exercises.forEach((exercise) => {
-        exercise.workout_id = workout_id;
+        exercise.workoutId = workoutId;
       });
       return this.exercisesRepository.save(exercises);
     } catch (error) {
@@ -87,13 +87,13 @@ export class ExercisesService {
   }
 
   //get all exercises for a workout
-  async getExercisesForWorkout(workout_id: number) {
+  async getExercisesForWorkout(workoutId: number) {
     const exercises = await this.exercisesRepository.find({
-      where: { workout_id: workout_id },
+      where: { workoutId: workoutId },
     });
     if (!exercises) {
       throw new NotFoundException(
-        `Exercises for workout with id ${workout_id} not found`,
+        `Exercises for workout with id ${workoutId} not found`,
       );
     }
     return exercises;

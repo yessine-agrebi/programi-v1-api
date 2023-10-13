@@ -17,14 +17,14 @@ import { Set } from 'src/sets/entities/set.entity';
 
 @Entity()
 export class Exercise {
-  @PrimaryGeneratedColumn()
-  exercise_id: number;
+  @PrimaryGeneratedColumn({ name: 'exercise_id' })
+  exerciseId: number;
 
-  @Column()
-  exercise_name: string;
+  @Column({ name: 'exercise_name' })
+  exerciseName: string;
 
-  @Column()
-  body_part: string;
+  @Column({ name: 'body_part' })
+  bodyPart: string;
 
   @Column()
   equipment: string;
@@ -37,21 +37,23 @@ export class Exercise {
   @JoinColumn({ name: 'workout_id' })
   workout: Workout;
 
-  @Column({ nullable: true })
-  workout_id: number;
+  @Column({ nullable: true, name: 'workout_id' })
+  workoutId: number;
 
-  @Column()
-  user_id: number;
+  @Column({ name: 'user_id' })
+  userId: number;
 
-  @Column({ nullable: true })
-  best_set_id?: number;
+  @Column({ nullable: true, name: 'best_set_id' })
+  bestSetId?: number;
 
   @OneToMany(() => Set, (set) => set.sets)
   sets: Set[];
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
   @UpdateDateColumn()
   updated_at: Date;
 

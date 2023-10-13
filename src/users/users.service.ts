@@ -35,14 +35,14 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return this.usersRepository.findOneBy({ user_id: id });
+    return this.usersRepository.findOneBy({ userId: id });
   }
 
   async update(id: number, attributes: Partial<User>) {
     if (attributes.email) {
       const existingUser = await this.usersRepository.findOneBy({
         email: attributes.email,
-        user_id: Not(id),
+        userId: Not(id),
       });
       if (existingUser) {
         throw new ConflictException(
@@ -51,7 +51,7 @@ export class UsersService {
       }
     }
     try {
-      const user = await this.usersRepository.findOneBy({ user_id: id });
+      const user = await this.usersRepository.findOneBy({ userId: id });
       if (!user) {
         throw new NotFoundException(`User with id ${id} not found`);
       }
