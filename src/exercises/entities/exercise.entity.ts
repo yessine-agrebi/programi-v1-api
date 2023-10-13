@@ -1,4 +1,7 @@
 import {
+  AfterInsert,
+  AfterRemove,
+  AfterUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -51,4 +54,21 @@ export class Exercise {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @AfterInsert()
+  async afterInsert() {
+    console.log('🚀 -----New exercise created----- ✅');
+  }
+
+  @AfterUpdate()
+  async afterUpdate() {
+    console.log('🚀 -----Exercise updated----- ✅');
+  }
+
+  @AfterRemove()
+  async afterRemove() {
+    console.log('🚀 -----Exercise removed----- ✅');
+  }
 }

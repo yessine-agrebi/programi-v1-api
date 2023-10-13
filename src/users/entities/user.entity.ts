@@ -52,16 +52,16 @@ export class User {
 
   @AfterInsert()
   async afterInsert() {
-    console.log('New user created');
+    console.log('🚀 -----New user created----- ✅');
   }
 
   @AfterUpdate()
   async afterUpdate() {
-    console.log('User updated');
+    console.log('🚀 -----User updated----- ✅');
   }
 
   @AfterRemove()
   async afterRemove() {
-    console.log('User removed');
+    console.log('🚀 -----User removed----- ✅');
   }
 }
