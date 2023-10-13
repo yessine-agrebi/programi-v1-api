@@ -2,7 +2,7 @@ import { IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class CreateProgramDto {
   @IsString()
-  program_name: string;
+  programName: string;
 
   @IsString()
   @IsOptional()
@@ -10,12 +10,12 @@ export class CreateProgramDto {
 
   @IsDateString()
   @IsOptional()
-  start_date: Date;
+  startDate: Date;
 
   @IsDateString()
   @IsOptional()
-  end_date: Date;
+  endDate: Date;
 
   @IsInt()
-  user_id: number;
+  userId: number;
 }

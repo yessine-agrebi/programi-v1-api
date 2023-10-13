@@ -11,7 +11,7 @@ export async function seedWorkouts(
 
   for (let i = 0; i < 10; i++) {
     const program = programs[Math.floor(Math.random() * programs.length)];
-    const workout = generateWorkout(program.program_id);
+    const workout = generateWorkout(program.programId);
 
     const _workout = workoutRepository.create(workout);
     await workoutRepository.save(_workout);

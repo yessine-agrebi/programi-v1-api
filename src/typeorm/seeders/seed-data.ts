@@ -12,9 +12,9 @@ export async function seedData(dataSource: DataSource): Promise<void> {
     const lastName = name.lastName();
     const user = {
       email: internet.email(firstName, lastName),
+      password: internet.password(),
       firstName,
       lastName,
-      password: internet.password(),
       height: Math.floor(Math.random() * 250),
       weight: Math.floor(Math.random() * 250),
       age: Math.floor(Math.random() * 50),

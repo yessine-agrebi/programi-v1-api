@@ -11,7 +11,7 @@ export async function seedSets(
 
   for (let i = 0; i < 10; i++) {
     const exercise = exercises[Math.floor(Math.random() * exercises.length)];
-    const set = generateSet(exercise?.exercise_id);
+    const set = generateSet(exercise?.exerciseId);
 
     const _set = setRepository.create(set);
     await setRepository.save(_set);

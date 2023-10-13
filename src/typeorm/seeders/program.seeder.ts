@@ -11,7 +11,7 @@ export async function seedPrograms(
 
   for (let i = 0; i < 10; i++) {
     const user = users[Math.floor(Math.random() * users.length)];
-    const program = generateProgram(user.user_id);
+    const program = generateProgram(user.userId);
 
     const _program = programRepository.create(program);
     await programRepository.save(_program);
