@@ -14,7 +14,7 @@ import { Program } from 'src/programs/entities/program.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn({ name: 'user_id'})
+  @PrimaryGeneratedColumn({ name: 'user_id' })
   userId: number;
 
   @Column({ unique: true })
@@ -23,10 +23,10 @@ export class User {
   @Column()
   password: string;
 
-  @Column({name: 'first_name'})
+  @Column({ name: 'first_name' })
   firstName: string;
 
-  @Column({name: 'last_name'})
+  @Column({ name: 'last_name' })
   lastName: string;
 
   @Column({ nullable: true })
@@ -44,10 +44,10 @@ export class User {
   @OneToMany(() => Exercise, (exercise) => exercise.user)
   exercises: Exercise[];
 
-  @CreateDateColumn({ name: 'created_at'})
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at'})
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
   @AfterInsert()

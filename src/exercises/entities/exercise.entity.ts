@@ -14,13 +14,13 @@ import { Set } from 'src/sets/entities/set.entity';
 
 @Entity()
 export class Exercise {
-  @PrimaryGeneratedColumn({ name: 'exercise_id'})
+  @PrimaryGeneratedColumn({ name: 'exercise_id' })
   exerciseId: number;
 
-  @Column({ name: 'exercise_name'})
+  @Column({ name: 'exercise_name' })
   exerciseName: string;
 
-  @Column({ name: 'body_part'})
+  @Column({ name: 'body_part' })
   bodyPart: string;
 
   @Column()
@@ -37,7 +37,7 @@ export class Exercise {
   @Column({ nullable: true, name: 'workout_id' })
   workoutId: number;
 
-  @Column({ name: 'user_id'})
+  @Column({ name: 'user_id' })
   userId: number;
 
   @Column({ nullable: true, name: 'best_set_id' })
@@ -46,9 +46,9 @@ export class Exercise {
   @OneToMany(() => Set, (set) => set.sets)
   sets: Set[];
 
-  @CreateDateColumn({ name: 'created_at'})
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at'})
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

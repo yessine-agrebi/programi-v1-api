@@ -28,8 +28,16 @@ export class ProgramsService {
 
   findAll() {
     //excluse created_at and updated_at from the response
-    return this.programsRepository.find({ select: ['programId', 'programName', 'description', 'startDate', 'endDate', 'userId'] });
-
+    return this.programsRepository.find({
+      select: [
+        'programId',
+        'programName',
+        'description',
+        'startDate',
+        'endDate',
+        'userId',
+      ],
+    });
   }
 
   findOne(id: number) {

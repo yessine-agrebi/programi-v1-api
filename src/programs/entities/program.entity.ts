@@ -13,10 +13,10 @@ import { Workout } from 'src/workouts/entities/workout.entity';
 
 @Entity()
 export class Program {
-  @PrimaryGeneratedColumn({ name: 'program_id'})
+  @PrimaryGeneratedColumn({ name: 'program_id' })
   programId: number;
 
-  @Column({name: 'program_name', nullable: false})
+  @Column({ name: 'program_name', nullable: false })
   programName: string;
 
   @Column({ nullable: true })

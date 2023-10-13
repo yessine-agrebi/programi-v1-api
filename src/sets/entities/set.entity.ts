@@ -11,7 +11,7 @@ import {
 
 @Entity()
 export class Set {
-  @PrimaryGeneratedColumn({ name: 'set_id'})
+  @PrimaryGeneratedColumn({ name: 'set_id' })
   setId: number;
 
   @Column({ type: 'float' })
@@ -20,7 +20,7 @@ export class Set {
   @Column()
   reps: number;
 
-  @Column({ name: 'set_num'})
+  @Column({ name: 'set_num' })
   setNum: number;
 
   @ManyToOne(() => Exercise, (workout) => workout.sets)
@@ -35,9 +35,9 @@ export class Set {
   @Column({ default: false, name: 'is_best_set' })
   isBestSet: boolean;
 
-  @CreateDateColumn({ name: 'created_at'})
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at'})
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAat: Date;
 }
