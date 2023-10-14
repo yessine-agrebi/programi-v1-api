@@ -68,6 +68,7 @@ export class WorkoutsService {
   getWorkoutsOfProgram(id: number) {
     return this.workoutsRepository.find({
       select: ['workoutId', 'workoutName', 'date'],
-      where: { programId: id } });
+      where: { programId: id },
+    });
   }
 }

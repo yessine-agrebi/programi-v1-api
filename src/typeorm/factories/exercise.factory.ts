@@ -3,10 +3,10 @@ import { lorem } from 'faker';
 
 export function generateExercise(userId: number): Partial<Exercise> {
   const exercise = {
-    exercise_name: lorem.words(3),
-    body_part: lorem.word(),
+    exerciseName: lorem.words(3),
+    bodyPart: lorem.word(),
     equipment: lorem.word(),
-    user_id: userId, // Associate the exercise with the user.
+    userId: userId, // Associate the exercise with the user.
   };
   return exercise;
 }
