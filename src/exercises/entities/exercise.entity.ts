@@ -55,7 +55,6 @@ export class Exercise {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
   @UpdateDateColumn()
-  updated_at: Date;
 
   @AfterInsert()
   async afterInsert() {

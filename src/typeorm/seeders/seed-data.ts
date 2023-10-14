@@ -10,6 +10,7 @@ export async function seedData(dataSource: DataSource): Promise<void> {
   for (let i = 0; i < 10; i++) {
     const firstName = name.firstName();
     const lastName = name.lastName();
+    console.log(firstName, lastName);
     const user = {
       email: internet.email(firstName, lastName),
       password: internet.password(),

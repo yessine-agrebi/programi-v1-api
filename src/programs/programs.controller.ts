@@ -48,16 +48,4 @@ export class ProgramsController {
     await this.programsService.remove(+id);
   }
 
-  //@Get('/workouts/:programId')
-
-  // @Get('/workouts/:id')
-  // getWorkoutsOfProgram(@Param('id') id: string) {
-  //   const workouts = this.programsService.getWorkoutsOfProgram(+id);
-  //   if (!workouts) {
-  //     throw new NotFoundException(
-  //       `Error finding workouts for program with id ${id}`,
-  //     );
-  //   }
-  //   return workouts;
-  // }
 }

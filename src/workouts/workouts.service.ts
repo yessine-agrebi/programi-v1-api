@@ -14,10 +14,10 @@ export class WorkoutsService {
   ) {}
 
   async create(attributes: Partial<Workout>) {
-    const program = await this.programsService.findOne(attributes.program_id);
+    const program = await this.programsService.findOne(attributes.programId);
     if (!program) {
       throw new NotFoundException(
-        `Program with id ${attributes.program_id} not found`,
+        `Program with id ${attributes.programId} not found`,
       );
     }
     try {
@@ -33,19 +33,19 @@ export class WorkoutsService {
   }
 
   findOne(id: number) {
-    return this.workoutsRepository.findOneBy({ workout_id: id });
+    return this.workoutsRepository.findOneBy({ workoutId: id });
   }
 
   async update(id: number, attributes: Partial<Workout>) {
-    const program = await this.programsService.findOne(attributes.program_id);
+    const program = await this.programsService.findOne(attributes.programId);
     if (!program) {
       throw new NotFoundException(
-        `Program with id ${attributes.program_id} not found`,
+        `Program with id ${attributes.programId} not found`,
       );
     }
     try {
       const workout = await this.workoutsRepository.findOneBy({
-        workout_id: id,
+        workoutId: id,
       });
       if (!workout) {
         throw new NotFoundException(`Workout with id ${id} not found`);
@@ -63,5 +63,11 @@ export class WorkoutsService {
       throw new NotFoundException(`Workout with id ${id} not found`);
     }
     return this.workoutsRepository.remove(workout);
+  }
+
+  getWorkoutsOfProgram(id: number) {
+    return this.workoutsRepository.find({
+      select: ['workoutId', 'workoutName', 'date'],
+      where: { programId: id } });
   }
 }

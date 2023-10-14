@@ -1,9 +1,10 @@
-import { IsDateString, IsInt } from 'class-validator';
+import { IsDateString, IsInt, IsString } from 'class-validator';
 
 export class CreateWorkoutDto {
   @IsInt()
   programId: number;
-  workout_name: string;
+  @IsString()
+  workoutName: string;
   @IsDateString()
   date: Date;
 }

@@ -47,4 +47,8 @@ export class WorkoutsController {
   async removeProgram(@Param('id') id: string) {
     await this.workoutsService.remove(+id);
   }
+  @Get('program/:id')
+  async getWorkoutsOfProgram(@Param('id') id: string) {
+    return await this.workoutsService.getWorkoutsOfProgram(+id);
+  }
 }

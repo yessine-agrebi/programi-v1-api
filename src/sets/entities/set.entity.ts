@@ -44,7 +44,6 @@ export class Set {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAat: Date;
   @UpdateDateColumn()
-  updated_at: Date;
 
   @AfterInsert()
   async afterInsert() {
