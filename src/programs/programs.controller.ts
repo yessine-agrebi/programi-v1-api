@@ -47,5 +47,4 @@ export class ProgramsController {
   async removeProgram(@Param('id') id: string) {
     await this.programsService.remove(+id);
   }
-
 }

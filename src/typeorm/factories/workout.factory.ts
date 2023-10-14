@@ -3,8 +3,8 @@ import { lorem } from 'faker';
 
 export function generateWorkout(programId: number): Partial<Workout> {
   const workout = {
-    workout_name: lorem.words(3),
-    program_id: programId,
+    workoutName: lorem.words(3),
+    programId: programId,
     date: new Date(),
   };
   return workout;

@@ -16,17 +16,17 @@ import { Program } from 'src/programs/entities/program.entity';
 
 @Entity()
 export class Workout {
-  @PrimaryGeneratedColumn({ name: 'workout_id'})
+  @PrimaryGeneratedColumn({ name: 'workout_id' })
   workoutId: number;
 
   @ManyToOne(() => Program, (program) => program.workouts)
   @JoinColumn({ name: 'program_id' })
   program: Program;
 
-  @Column({ name: 'workout_name'})
+  @Column({ name: 'workout_name' })
   workoutName: string;
 
-  @Column({ name: 'program_id'})
+  @Column({ name: 'program_id' })
   programId: number;
 
   @Column({ type: 'date' })
@@ -35,10 +35,10 @@ export class Workout {
   @OneToMany(() => Exercise, (exercise) => exercise.workout) // Define the relationship with Exercise
   exercises: Exercise[];
 
-  @CreateDateColumn({ name: 'created_at'})
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at'})
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
   @AfterInsert()

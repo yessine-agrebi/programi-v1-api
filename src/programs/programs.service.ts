@@ -72,5 +72,4 @@ export class ProgramsService {
     }
     return this.programsRepository.remove(program);
   }
-  
 }

@@ -44,7 +44,6 @@ export class Set {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAat: Date;
   @UpdateDateColumn()
-
   @AfterInsert()
   async afterInsert() {
     console.log('🚀 -----New set created----- ✅');

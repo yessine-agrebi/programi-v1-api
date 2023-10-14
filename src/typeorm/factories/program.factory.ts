@@ -3,11 +3,11 @@ import { lorem } from 'faker';
 
 export function generateProgram(userId: number): Partial<Program> {
   const program = {
-    program_name: lorem.words(3),
+    programName: lorem.words(3),
     description: lorem.sentence(),
-    start_date: new Date(),
-    end_date: new Date(),
-    user_id: userId,
+    startDate: new Date(),
+    endDate: new Date(),
+    userId: userId,
   };
   return program;
 }
