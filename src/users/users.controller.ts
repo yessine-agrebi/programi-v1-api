@@ -9,22 +9,33 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UserDto } from './dto/user.dto';
+import { AuthService } from './auth.service';
 
+@Serialize(UserDto)
 @Controller('api/v1/users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
-  @Post('/signup')
+  @Post('/auth/signup')
   createUser(@Body() body: CreateUserDto) {
-    return this.usersService.create(body);
+    return this.authService.signup(body);
   }
 
   @Get()
-  findAllUsers() {
+  findAllUsers(@Query('email') email: string) {
+    if (email) {
+      return this.usersService.findOneByEmail(email);
+    }
     return this.usersService.findAll();
   }
 
