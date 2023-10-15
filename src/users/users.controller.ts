@@ -18,6 +18,7 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
 import { AuthService } from './auth.service';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { SigninUserDto } from './dto/signin-user.dto';
 
 @UseGuards(ThrottlerGuard)
 @Serialize(UserDto)
@@ -29,8 +30,13 @@ export class UsersController {
   ) {}
 
   @Post('/auth/signup')
-  createUser(@Body() body: CreateUserDto) {
+  signup(@Body() body: CreateUserDto) {
     return this.authService.signup(body);
+  }
+
+  @Post('/auth/signin')
+  signin(@Body() body: SigninUserDto) {
+    return this.authService.signin(body.email, body.password);
   }
 
   @Get()

@@ -51,8 +51,8 @@ dotenvConfig({ path: '.env' });
     // }),
     ThrottlerModule.forRoot([
       {
-        ttl: 60000,
-        limit: 10,
+        ttl: 60000, // 60 seconds
+        limit: 100, // 100 requests
       },
     ]),
     ProgramsModule,
