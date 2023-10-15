@@ -10,6 +10,8 @@ import {
   HttpStatus,
   Query,
   UseGuards,
+  Session,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +21,9 @@ import { UserDto } from './dto/user.dto';
 import { AuthService } from './auth.service';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { SigninUserDto } from './dto/signin-user.dto';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { User } from './entities/user.entity';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @UseGuards(ThrottlerGuard)
 @Serialize(UserDto)
@@ -30,13 +35,40 @@ export class UsersController {
   ) {}
 
   @Post('/auth/signup')
-  signup(@Body() body: CreateUserDto) {
-    return this.authService.signup(body);
+  async signup(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.signup(body);
+    // 2 conditions: change current user after signup or only after signin
+    // session.userId = user.userId;
+    return user;
   }
 
   @Post('/auth/signin')
-  signin(@Body() body: SigninUserDto) {
-    return this.authService.signin(body.email, body.password);
+  @HttpCode(HttpStatus.OK)
+  async signin(@Body() body: SigninUserDto, @Session() session: any) {
+    const user = await this.authService.signin(body.email, body.password);
+    session.userId = user.userId;
+    return user;
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/auth/current-user')
+  async whoAmI(@Session() session: any, @CurrentUser() user: User) {
+    // DRY: don't repeat yourself
+    // use Guards instead
+    // if (!session.userId) {
+    //   throw new NotFoundException('You are not logged in');
+    // }
+    return user;
+  }
+
+  @Post('/auth/signout')
+  @HttpCode(HttpStatus.OK)
+  signOut(@Session() session: any) {
+    if (!session.userId) {
+      throw new NotFoundException('You are not logged in');
+    }
+    delete session.userId;
+    // session.userId = null;
   }
 
   @Get()

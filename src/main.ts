@@ -4,8 +4,6 @@ import { ValidationPipe } from '@nestjs/common';
 
 let CookieSession: any;
 
-console.log(process.env.SESSION_SECRET);
-
 async function bootstrap() {
   CookieSession = await import('cookie-session');
   const app = await NestFactory.create(AppModule);
