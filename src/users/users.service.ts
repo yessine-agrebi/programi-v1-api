@@ -34,12 +34,20 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  findOne(id: number) {
-    return this.usersRepository.findOneBy({ userId: id });
+  async findOne(id: number) {
+    const user = await this.usersRepository.findOneBy({ userId: id });
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
   }
 
-  findOneByEmail(email: string) {
-    return this.usersRepository.findOneBy({ email });
+  async findOneByEmail(email: string) {
+    const user = await this.usersRepository.findOneBy({ email });
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+    return user;
   }
 
   async update(id: number, attributes: Partial<User>) {

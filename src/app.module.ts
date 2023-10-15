@@ -15,6 +15,7 @@ import { Program } from './programs/entities/program.entity';
 // import { ConfigModule, ConfigService } from '@nestjs/config';
 // import typeorm from './typeorm/typeorm';
 import { config as dotenvConfig } from 'dotenv';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 dotenvConfig({ path: '.env' });
 
@@ -48,6 +49,12 @@ dotenvConfig({ path: '.env' });
     //   useFactory: (configService: ConfigService) =>
     //     configService.get('typeorm'),
     // }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     ProgramsModule,
     UsersModule,
     ExercisesModule,
