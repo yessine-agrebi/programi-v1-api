@@ -4,12 +4,12 @@ import {
   Body,
   Get,
   Param,
-  NotFoundException,
   Patch,
   Delete,
   HttpCode,
   HttpStatus,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,7 +17,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
 import { AuthService } from './auth.service';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
+@UseGuards(ThrottlerGuard)
 @Serialize(UserDto)
 @Controller('api/v1/users')
 export class UsersController {
@@ -40,12 +42,8 @@ export class UsersController {
   }
 
   @Get('/:id')
-  async findOneUser(@Param('id') id: string) {
-    const user = await this.usersService.findOne(+id);
-    if (!user) {
-      throw new NotFoundException(`Error finding user with id ${id}`);
-    }
-    return user;
+  findOneUser(@Param('id') id: string) {
+    return this.usersService.findOne(+id);
   }
 
   @Patch('/:id')
