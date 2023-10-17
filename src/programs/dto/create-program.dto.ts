@@ -1,4 +1,4 @@
-import { IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CreateProgramDto {
   @IsString()
@@ -15,7 +15,4 @@ export class CreateProgramDto {
   @IsDateString()
   @IsOptional()
   endDate: Date;
-
-  @IsInt()
-  userId: number;
 }

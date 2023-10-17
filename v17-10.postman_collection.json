@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "b81cc8c3-fc99-45b8-9347-b4fa3491bb71",
-		"name": "workout collection",
+		"_postman_id": "b0b16240-3e33-4ab7-8c22-9e2002be5ee2",
+		"name": "workout",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20565698"
 	},
@@ -10,7 +10,7 @@
 			"name": "Workout",
 			"item": [
 				{
-					"name": "User",
+					"name": "Auth",
 					"item": [
 						{
 							"name": "Signup",
@@ -19,7 +19,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"rhf@dqd.ddve\",\r\n    \"password\": \"rami\",\r\n    \"firstName\": \"dsds\",\r\n    \"lastName\": \"dev\"\r\n}",
+									"raw": "{\r\n    \"email\": \"gddddff@dqd.dee\",\r\n    \"password\": \"rami\",\r\n    \"firstName\": \"dsds\",\r\n    \"lastName\": \"dev\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -27,7 +27,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{URL}}/api/v1/users/signup",
+									"raw": "{{URL}}/api/v1/users/auth/signup",
 									"host": [
 										"{{URL}}"
 									],
@@ -35,12 +35,111 @@
 										"api",
 										"v1",
 										"users",
+										"auth",
 										"signup"
 									]
 								}
 							},
 							"response": []
 						},
+						{
+							"name": "Signin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"gddddff@dqd.dee\",\r\n    \"password\": \"rami\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/signin",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"signin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Current user",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"gdfgddggdf@dqd.ddve\",\r\n    \"password\": \"rami\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/current-user",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"current-user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Signout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/signout",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"signout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
 						{
 							"name": "Get users",
 							"request": {
@@ -61,12 +160,37 @@
 							"response": []
 						},
 						{
+							"name": "Get users By Email",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/users?email=gdfgggdf@dqd.ddve",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "gdfgggdf@dqd.ddve"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Get user",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{URL}}/api/v1/users/18",
+									"raw": "{{URL}}/api/v1/users/316",
 									"host": [
 										"{{URL}}"
 									],
@@ -74,7 +198,7 @@
 										"api",
 										"v1",
 										"users",
-										"18"
+										"316"
 									]
 								}
 							},
@@ -141,7 +265,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"programName\": \"My New Program\",\r\n  \"description\": \"This is a description of my new program.\",\r\n  \"startDate\": \"2022-01-01\",\r\n  \"endDate\": \"2022-12-31\",\r\n  \"userId\": 2\r\n}",
+									"raw": "{\r\n  \"programName\": \"My New Program\",\r\n  \"description\": \"This is a description of my new program.\",\r\n  \"startDate\": \"2022-01-01\",\r\n  \"endDate\": \"2022-12-31\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -168,14 +292,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{URL}}/api/v1/programs",
+									"raw": "{{URL}}/api/v1/programs/100",
 									"host": [
 										"{{URL}}"
 									],
 									"path": [
 										"api",
 										"v1",
-										"programs"
+										"programs",
+										"100"
 									]
 								}
 							},
@@ -283,7 +408,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"exerciseName\": \"Bench Press\",\r\n  \"bodyPart\": \"Chest\",\r\n  \"equipment\": \"Barbell\",\r\n  \"userId\": 1,\r\n  \"bestSetId\": 10\r\n}",
+									"raw": "{\r\n  \"exerciseName\": \"Bench Press\",\r\n  \"bodyPart\": \"Chest\",\r\n  \"equipment\": \"Barbell\",\r\n  \"bestSetId\": 10\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
