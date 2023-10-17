@@ -11,9 +11,6 @@ export class CreateExerciseDto {
   equipment: string;
 
   @IsInt()
-  userId: number;
-
-  @IsInt()
   @IsOptional()
   bestSetId?: number;
 }

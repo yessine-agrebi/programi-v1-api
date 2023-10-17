@@ -9,18 +9,26 @@ import {
   NotFoundException,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ProgramsService } from './programs.service';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { CurrentUser } from 'src/users/decorators/current-user.decorator';
+import { User } from 'src/users/entities/user.entity';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { ProgramDto } from './dto/program.dto';
 
 @Controller('api/v1/programs')
 export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}
 
   @Post()
-  createProgram(@Body() body: CreateProgramDto) {
-    return this.programsService.create(body);
+  @UseGuards(AuthGuard)
+  @Serialize(ProgramDto)
+  createProgram(@Body() body: CreateProgramDto, @CurrentUser() user: User) {
+    return this.programsService.create(body, user);
   }
 
   @Get()

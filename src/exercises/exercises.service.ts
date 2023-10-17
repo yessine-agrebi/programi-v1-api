@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Exercise } from './entities/exercise.entity';
 import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ExercisesService {
@@ -12,16 +13,13 @@ export class ExercisesService {
     private usersService: UsersService,
   ) {}
 
-  async create(attributes: Partial<Exercise>) {
-    const user = await this.usersService.findOne(attributes.userId);
-    if (!user) {
-      throw new NotFoundException(
-        `User with id ${attributes.userId} not found`,
-      );
-    }
+  async create(attributes: Partial<Exercise>, user: User) {
     try {
       const exercise = this.exercisesRepository.create(attributes);
-      return await this.exercisesRepository.save(exercise);
+      return await this.exercisesRepository.save({
+        ...exercise,
+        userId: user.userId,
+      });
     } catch (error) {
       throw error;
     }

@@ -9,18 +9,22 @@ import {
   NotFoundException,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 
 @Controller('api/v1/exercises')
 export class ExercisesController {
   constructor(private readonly exercisesService: ExercisesService) {}
 
   @Post()
-  createExercise(@Body() body: CreateExerciseDto) {
-    return this.exercisesService.create(body);
+  @UseGuards(AuthGuard)
+  createExercise(@Body() body: CreateExerciseDto, @CurrentUser() user) {
+    return this.exercisesService.create(body, user);
   }
 
   @Get()

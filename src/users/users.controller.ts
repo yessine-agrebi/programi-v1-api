@@ -35,7 +35,10 @@ export class UsersController {
   ) {}
 
   @Post('/auth/signup')
-  async signup(@Body() body: CreateUserDto, @Session() session: any) {
+  async signup(
+    @Body() body: CreateUserDto,
+    // @Session() session: any
+  ) {
     const user = await this.authService.signup(body);
     // 2 conditions: change current user after signup or only after signin
     // session.userId = user.userId;
