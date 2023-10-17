@@ -63,4 +63,13 @@ export class SetsService {
     }
     return this.setsRepository.remove(set);
   }
+
+  async findSetsByExerciseId(exerciseId: number) {
+    const sets = await this.setsRepository.find({
+      where: {
+        exerciseId: exerciseId,
+      },
+    });
+    return sets;
+  }
 }

@@ -48,5 +48,8 @@ export class SetsController {
     await this.setsService.remove(+id);
   }
 
-  //@Get('exercise/:exerciseId')
+  @Get('exercise/:exerciseId')
+  async findSetsByExerciseId(@Param('exerciseId') exerciseId: string) {
+    return await this.setsService.findSetsByExerciseId(+exerciseId);
+  }
 }
