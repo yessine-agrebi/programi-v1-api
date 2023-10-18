@@ -6,6 +6,7 @@ import { UsersController } from './users.controller';
 import { User } from './entities/user.entity';
 import { AuthService } from './auth.service';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { PasswordReset } from './entities/password-reset.entity';
 
 @Module({
   controllers: [UsersController],
@@ -20,7 +21,7 @@ import { CurrentUserInterceptor } from './interceptors/current-user.interceptor'
       useClass: CurrentUserInterceptor,
     },
   ],
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User, PasswordReset])],
   exports: [UsersService],
 })
 export class UsersModule {}
