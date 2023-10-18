@@ -19,8 +19,12 @@ export class AuthService {
     private readonly mailerService: MailerService,
   ) {}
 
+  generateRandomPassword(length: number) {
+    return randomBytes(length).toString('hex');
+  }
+
   async signup(attributes: Partial<User>) {
-    const salt = randomBytes(8).toString('hex');
+    const salt = this.generateRandomPassword(8);
     const hash = (await scrypt(attributes.password, salt, 32)) as Buffer;
     const result = salt + '.' + hash.toString('hex');
     const user = await this.usersService.create({
@@ -55,7 +59,7 @@ export class AuthService {
 
   async resetPassword(email: string) {
     const user = await this.usersService.findOneByEmail(email);
-    const token = randomBytes(20).toString('hex');
+    const token = this.generateRandomPassword(20);
 
     const passwordReset = this.passwordResetRepository.create({ token, user });
     await this.passwordResetRepository.save(passwordReset);
@@ -95,7 +99,7 @@ export class AuthService {
       throw new BadRequestException('Token expired');
     }
 
-    const salt = randomBytes(8).toString('hex');
+    const salt = this.generateRandomPassword(8);
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     const result = salt + '.' + hash.toString('hex');
 

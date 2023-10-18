@@ -12,6 +12,8 @@ import {
   UseGuards,
   Session,
   NotFoundException,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,6 +26,8 @@ import { SigninUserDto } from './dto/signin-user.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './entities/user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @UseGuards(ThrottlerGuard)
 @Controller('api/v1/users')
@@ -31,6 +35,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
+    private readonly mailerService: MailerService,
   ) {}
 
   @Serialize(UserDto)
@@ -91,6 +96,51 @@ export class UsersController {
     return {
       message: 'Password successfully changed',
     };
+  }
+
+  @Get('/auth/google')
+  @UseGuards(PassportAuthGuard('google'))
+  googleLogin() {}
+
+  @Get('/auth/google/callback')
+  @UseGuards(PassportAuthGuard('google'))
+  async googleLoginCallback(
+    @Req() req: any,
+    @Res() res: any,
+    @Session() session: any,
+  ) {
+    const user = req.user;
+
+    const existingUser = await this.usersService.findOneByEmail(user.email);
+    if (existingUser) {
+      session.userId = existingUser.userId;
+      return {
+        message: 'Google authentication successful',
+        user: existingUser,
+      };
+    } else {
+      const newUser = await this.usersService.create({
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        password: this.authService.generateRandomPassword(16),
+      });
+
+      session.userId = newUser.userId;
+
+      await this.mailerService.sendMail({
+        to: newUser.email,
+        // from: process.env.GMAIL_USER,
+        subject: 'Welcome to Programi App',
+        template: 'welcome',
+        // text: `Your password reset token is ${token}`,
+        context: {
+          user: newUser,
+        },
+      });
+
+      res.redirect(process.env.FRONTEND_URL);
+    }
   }
 
   @Get()

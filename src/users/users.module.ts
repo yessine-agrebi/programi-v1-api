@@ -7,6 +7,8 @@ import { User } from './entities/user.entity';
 import { AuthService } from './auth.service';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { PasswordReset } from './entities/password-reset.entity';
+import { PassportModule } from '@nestjs/passport';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   controllers: [UsersController],
@@ -20,8 +22,9 @@ import { PasswordReset } from './entities/password-reset.entity';
       provide: APP_INTERCEPTOR,
       useClass: CurrentUserInterceptor,
     },
+    GoogleStrategy,
   ],
-  imports: [TypeOrmModule.forFeature([User, PasswordReset])],
+  imports: [PassportModule, TypeOrmModule.forFeature([User, PasswordReset])],
   exports: [UsersService],
 })
 export class UsersModule {}
