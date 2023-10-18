@@ -28,6 +28,7 @@
     "seed:sync": "ts-node -r tsconfig-paths/register ./src/typeorm/seed.helper.ts"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.9.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
@@ -40,6 +41,8 @@
     "cookie-session": "^2.0.0",
     "dotenv": "^16.3.1",
     "faker": "5.5.3",
+    "handlebars": "^4.7.8",
+    "nodemailer": "^6.9.6",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",

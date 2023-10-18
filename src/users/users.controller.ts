@@ -26,7 +26,6 @@ import { User } from './entities/user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @UseGuards(ThrottlerGuard)
-@Serialize(UserDto)
 @Controller('api/v1/users')
 export class UsersController {
   constructor(
@@ -34,6 +33,7 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
+  @Serialize(UserDto)
   @Post('/auth/signup')
   async signup(
     @Body() body: CreateUserDto,
@@ -45,6 +45,7 @@ export class UsersController {
     return user;
   }
 
+  @Serialize(UserDto)
   @Post('/auth/signin')
   @HttpCode(HttpStatus.OK)
   async signin(@Body() body: SigninUserDto, @Session() session: any) {
@@ -53,6 +54,7 @@ export class UsersController {
     return user;
   }
 
+  @Serialize(UserDto)
   @UseGuards(AuthGuard)
   @Get('/auth/current-user')
   async whoAmI(@Session() session: any, @CurrentUser() user: User) {
@@ -72,6 +74,23 @@ export class UsersController {
     }
     delete session.userId;
     // session.userId = null;
+  }
+
+  @Post('/auth/reset-password')
+  resetPassword(@Body('email') email: string) {
+    return this.authService.resetPassword(email);
+  }
+
+  @Post('/auth/new-password')
+  @HttpCode(HttpStatus.OK)
+  async newPassword(
+    @Body('token') token: string,
+    @Body('password') password: string,
+  ) {
+    await this.authService.changePassword(token, password);
+    return {
+      message: 'Password successfully changed',
+    };
   }
 
   @Get()

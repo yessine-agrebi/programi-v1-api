@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Exercise } from 'src/exercises/entities/exercise.entity';
 import { Program } from 'src/programs/entities/program.entity';
+import { PasswordReset } from './password-reset.entity';
 
 @Entity()
 export class User {
@@ -43,6 +44,9 @@ export class User {
 
   @OneToMany(() => Exercise, (exercise) => exercise.user)
   exercises: Exercise[];
+
+  @OneToMany(() => PasswordReset, (passwordReset) => passwordReset.user)
+  passwordResets: PasswordReset[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

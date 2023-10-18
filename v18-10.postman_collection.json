@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "b0b16240-3e33-4ab7-8c22-9e2002be5ee2",
-		"name": "workout",
+		"_postman_id": "1735e170-e87f-4575-9ef9-b7550d67378f",
+		"name": "programi",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20565698"
 	},
@@ -19,7 +19,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"gddddff@dqd.dee\",\r\n    \"password\": \"rami\",\r\n    \"firstName\": \"dsds\",\r\n    \"lastName\": \"dev\"\r\n}",
+									"raw": "{\r\n    \"email\": \"medcompte01@gmail.com\",\r\n    \"password\": \"rami\",\r\n    \"firstName\": \"dsds\",\r\n    \"lastName\": \"dev\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -49,7 +49,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"gddddff@dqd.dee\",\r\n    \"password\": \"rami\"\r\n}",
+									"raw": "{\r\n    \"email\": \"medcompte01@gmail.com\",\r\n    \"password\": \"ramii\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -130,6 +130,66 @@
 										"users",
 										"auth",
 										"signout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"medcompte01@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/reset-password",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"reset-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\": \"4053bcdadf62ab4abc3e2621118589c16d0f0175\",\r\n    \"password\": \"ramii\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/new-password",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"new-password"
 									]
 								}
 							},
