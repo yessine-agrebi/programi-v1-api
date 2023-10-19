@@ -14,6 +14,8 @@ import {
   NotFoundException,
   Req,
   Res,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -28,6 +30,7 @@ import { User } from './entities/user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 import { MailerService } from '@nestjs-modules/mailer';
+import { PaginationDto } from './dto/pagination.dto';
 
 @UseGuards(ThrottlerGuard)
 @Controller('api/v1/users')
@@ -144,11 +147,15 @@ export class UsersController {
   }
 
   @Get()
-  findAllUsers(@Query('email') email: string) {
+  findAllUsers(
+    @Query('email') email: string,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
+  ) {
     if (email) {
       return this.usersService.findOneByEmail(email);
     }
-    return this.usersService.findAll();
+    return this.usersService.findAll(page, limit);
   }
 
   @Get('/:id')

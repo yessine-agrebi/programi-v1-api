@@ -30,8 +30,11 @@ export class UsersService {
     }
   }
 
-  findAll() {
-    return this.usersRepository.find();
+  findAll(page: number, limit: number) {
+    return this.usersRepository.find({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
   }
 
   async findOne(id: number) {
