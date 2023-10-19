@@ -21,13 +21,14 @@ export class SerializeInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data: any) => {
-        // Check if data is an object with `data` and `total` properties
+        // Check if data is an object with `data` and `total`  properties
         if (data && data.data && data.total) {
           return {
+            ...data, // Spread the pagination details
             data: plainToInstance(this.dto, data.data, {
+              // Transform only the data
               excludeExtraneousValues: true,
             }),
-            total: data.total,
           };
         }
         // Otherwise, handle as before

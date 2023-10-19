@@ -56,12 +56,27 @@ export abstract class BaseService<Entity> {
         queryBuilder.addOrderBy(`entity.${column}`, direction);
       }
     });
+    queryBuilder.addOrderBy('entity.created_at', 'DESC');
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
-    return {
+    const result = {
       data,
       total,
+      per_page: limit,
+      current_page: page,
+      last_page: Math.ceil(total / limit),
+      first_page_url: `?page=1&limit=${limit}`,
+      last_page_url: `?page=${Math.ceil(total / limit)}&limit=${limit}`,
+      next_page_url:
+        page < Math.ceil(total / limit)
+          ? `?page=${page + 1}&limit=${limit}`
+          : null,
+      prev_page_url: page > 1 ? `?page=${page - 1}&limit=${limit}` : null,
+      from: (page - 1) * limit + 1,
+      to: page * limit > total ? total : page * limit,
     };
+
+    return result;
   }
 }

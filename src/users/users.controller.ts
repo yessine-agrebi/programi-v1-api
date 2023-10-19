@@ -150,7 +150,7 @@ export class UsersController {
 
   @Serialize(UserDto)
   @Get()
-  findAllUsers(
+  async findAllUsers(
     @Query('email') email: string,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
@@ -167,13 +167,15 @@ export class UsersController {
       search = validator.escape(search.trim());
     }
 
-    return this.usersService.findAll(
+    const result = await this.usersService.findAll(
       { firstName, lastName, email },
       search,
       page,
       limit,
       sort,
     );
+
+    return result;
   }
 
   @Get('/:id')
