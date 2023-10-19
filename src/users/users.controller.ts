@@ -151,13 +151,15 @@ export class UsersController {
     @Query('email') email: string,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
+    @Query('firstName') firstName: string,
+    @Query('lastName') lastName: string,
   ) {
     const maxLimit = 50;
     validatePagination(limit, page, maxLimit);
     if (email) {
       return this.usersService.findOneByEmail(email);
     }
-    return this.usersService.findAll(page, limit);
+    return this.usersService.findAll({ firstName, lastName }, page, limit);
   }
 
   @Get('/:id')

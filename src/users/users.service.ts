@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { Not, Repository, Equal, FindManyOptions } from 'typeorm';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -30,14 +30,27 @@ export class UsersService {
     }
   }
 
-  async findAll(page: number, limit: number) {
-    const [data, total] = await this.usersRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
+  async findAll(filter: Partial<User>, page: number, limit: number) {
+    const where = Object.keys(filter).reduce((prev, curr) => {
+      if (filter[curr] !== undefined) {
+        return { ...prev, [curr]: Equal(filter[curr]) };
+      }
+      return prev;
+    }, {});
+
+    const options: FindManyOptions<User> = {
+      where,
       order: {
         createdAt: 'DESC',
       },
-    });
+    };
+
+    if (Object.keys(where).length === 0) {
+      options.skip = (page - 1) * limit;
+      options.take = limit;
+    }
+
+    const [data, total] = await this.usersRepository.findAndCount(options);
 
     return {
       data,
