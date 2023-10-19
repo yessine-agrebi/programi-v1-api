@@ -10,12 +10,18 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  DefaultValuePipe,
+  ParseIntPipe,
+  Query,
+  ParseArrayPipe,
 } from '@nestjs/common';
 import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
+import { validatePagination } from 'src/utils/pagination.utils';
+import validator from 'validator';
 
 @Controller('api/v1/exercises')
 export class ExercisesController {
@@ -28,8 +34,27 @@ export class ExercisesController {
   }
 
   @Get()
-  findAllExercises() {
-    return this.exercisesService.findAll();
+  findAllExercises(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
+    @Query('exerciseName') exerciseName: string,
+    @Query('search') search: string,
+    @Query('sort', new DefaultValuePipe([]), ParseArrayPipe) sort: string[],
+  ) {
+    const maxLimit = 50;
+    validatePagination(limit, page, maxLimit);
+    if (search) {
+      search = validator.escape(search.trim());
+    }
+    return this.exercisesService.findAll(
+      {
+        exerciseName,
+      },
+      search,
+      page,
+      limit,
+      sort,
+    );
   }
 
   @Get('/:id')

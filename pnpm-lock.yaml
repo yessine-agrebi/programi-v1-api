@@ -74,6 +74,9 @@ dependencies:
   typeorm:
     specifier: ^0.3.17
     version: 0.3.17(pg@8.11.3)(ts-node@10.9.1)
+  validator:
+    specifier: ^13.11.0
+    version: 13.11.0
 
 devDependencies:
   '@nestjs/cli':
@@ -106,6 +109,9 @@ devDependencies:
   '@types/supertest':
     specifier: ^2.0.12
     version: 2.0.13
+  '@types/validator':
+    specifier: ^13.11.5
+    version: 13.11.5
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.0.0
     version: 6.7.3(@typescript-eslint/parser@6.7.3)(eslint@8.50.0)(typescript@5.2.2)
@@ -1513,8 +1519,8 @@ packages:
       '@types/superagent': 4.1.19
     dev: true
 
-  /@types/validator@13.11.2:
-    resolution: {integrity: sha512-nIKVVQKT6kGKysnNt+xLobr+pFJNssJRi2s034wgWeFBUx01fI8BeHTW2TcRp7VcFu9QCYG8IlChTuovcm0oKQ==}
+  /@types/validator@13.11.5:
+    resolution: {integrity: sha512-xW4qsT4UIYILu+7ZrBnfQdBYniZrMLYYK3wN9M/NdeIHgBN5pZI2/8Q7UfdWIcr5RLJv/OGENsx91JIpUUoC7Q==}
 
   /@types/yargs-parser@21.0.1:
     resolution: {integrity: sha512-axdPBuLuEJt0c4yI5OZssC19K2Mq1uKdrfZBzuxLvaztgqUtFYZUNw7lETExPYJR9jdEoIg4mb7RQKRQzOkeGQ==}
@@ -3058,7 +3064,7 @@ packages:
   /class-validator@0.14.0:
     resolution: {integrity: sha512-ct3ltplN8I9fOwUd8GrP8UQixwff129BkEtuWDKL5W45cQuLd19xqmTLu5ge78YDm/fdje6FMt0hGOhl0lii3A==}
     dependencies:
-      '@types/validator': 13.11.2
+      '@types/validator': 13.11.5
       libphonenumber-js: 1.10.47
       validator: 13.11.0
 

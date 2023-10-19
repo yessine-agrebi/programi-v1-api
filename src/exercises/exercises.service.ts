@@ -4,14 +4,25 @@ import { In, Repository } from 'typeorm';
 import { Exercise } from './entities/exercise.entity';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
+import { BaseService } from 'src/common/base.service';
 
 @Injectable()
-export class ExercisesService {
+export class ExercisesService extends BaseService<Exercise> {
   constructor(
     @InjectRepository(Exercise)
     private exercisesRepository: Repository<Exercise>,
     private usersService: UsersService,
-  ) {}
+  ) {
+    super(exercisesRepository);
+  }
+
+  protected getSearchableColumns(): string[] {
+    return ['exerciseName'];
+  }
+
+  protected getSortableStringColumns(): string[] {
+    return ['exerciseName'];
+  }
 
   async create(attributes: Partial<Exercise>, user: User) {
     try {
@@ -23,10 +34,6 @@ export class ExercisesService {
     } catch (error) {
       throw error;
     }
-  }
-
-  findAll() {
-    return this.exercisesRepository.find();
   }
 
   findOne(id: number) {

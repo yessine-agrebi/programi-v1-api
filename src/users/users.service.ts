@@ -6,12 +6,24 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+// import { plainToClass } from 'class-transformer';
+import { BaseService } from 'src/common/base.service';
 
 @Injectable()
-export class UsersService {
+export class UsersService extends BaseService<User> {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
-  ) {}
+  ) {
+    super(usersRepository);
+  }
+
+  protected getSearchableColumns(): string[] {
+    return ['firstName', 'lastName', 'email'];
+  }
+
+  protected getSortableStringColumns(): string[] {
+    return ['firstName', 'lastName'];
+  }
 
   async create(attributes: Partial<User>) {
     const existingUser = await this.usersRepository.findOneBy({
@@ -28,10 +40,6 @@ export class UsersService {
     } catch (error) {
       throw error;
     }
-  }
-
-  findAll() {
-    return this.usersRepository.find();
   }
 
   async findOne(id: number) {
