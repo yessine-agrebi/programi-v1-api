@@ -30,11 +30,19 @@ export class UsersService {
     }
   }
 
-  findAll(page: number, limit: number) {
-    return this.usersRepository.find({
+  async findAll(page: number, limit: number) {
+    const [data, total] = await this.usersRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
+      order: {
+        createdAt: 'DESC',
+      },
     });
+
+    return {
+      data,
+      total,
+    };
   }
 
   async findOne(id: number) {

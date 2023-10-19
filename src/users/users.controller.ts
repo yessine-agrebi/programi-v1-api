@@ -30,7 +30,7 @@ import { User } from './entities/user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 import { MailerService } from '@nestjs-modules/mailer';
-import { PaginationDto } from './dto/pagination.dto';
+import { validatePagination } from 'src/utils/pagination.utils';
 
 @UseGuards(ThrottlerGuard)
 @Controller('api/v1/users')
@@ -152,6 +152,8 @@ export class UsersController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
   ) {
+    const maxLimit = 50;
+    validatePagination(limit, page, maxLimit);
     if (email) {
       return this.usersService.findOneByEmail(email);
     }
