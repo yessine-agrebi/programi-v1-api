@@ -21,6 +21,16 @@ export class SerializeInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data: any) => {
+        // Check if data is an object with `data` and `total` properties
+        if (data && data.data && data.total) {
+          return {
+            data: plainToInstance(this.dto, data.data, {
+              excludeExtraneousValues: true,
+            }),
+            total: data.total,
+          };
+        }
+        // Otherwise, handle as before
         return plainToInstance(this.dto, data, {
           excludeExtraneousValues: true,
         });

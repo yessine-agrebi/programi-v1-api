@@ -16,6 +16,7 @@ import {
   Res,
   DefaultValuePipe,
   ParseIntPipe,
+  ParseArrayPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -147,6 +148,7 @@ export class UsersController {
     }
   }
 
+  @Serialize(UserDto)
   @Get()
   findAllUsers(
     @Query('email') email: string,
@@ -155,20 +157,25 @@ export class UsersController {
     @Query('firstName') firstName: string,
     @Query('lastName') lastName: string,
     @Query('search') search: string,
+    // @Query('sort') sort: string,
+    @Query('sort', new DefaultValuePipe([]), ParseArrayPipe) sort: string[],
   ) {
     const maxLimit = 50;
     validatePagination(limit, page, maxLimit);
     if (email) {
       return this.usersService.findOneByEmail(email);
     }
-    // search = search.trim().replace(/[^\w\s]/gi, '');
-    search = validator.escape(search.trim());
+    if (search) {
+      // search = search.trim().replace(/[^\w\s]/gi, '');
+      search = validator.escape(search.trim());
+    }
 
     return this.usersService.findAll(
       { firstName, lastName },
       search,
       page,
       limit,
+      sort,
     );
   }
 

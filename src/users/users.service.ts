@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+// import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -35,6 +36,7 @@ export class UsersService {
     search: string,
     page: number,
     limit: number,
+    sort: string[],
   ) {
     const queryBuilder = this.usersRepository.createQueryBuilder('user');
 
@@ -47,18 +49,37 @@ export class UsersService {
 
     Object.keys(filter).forEach((key) => {
       if (filter[key] !== undefined) {
-        queryBuilder.andWhere(`user.${key} = :${key}`, { [key]: filter[key] });
+        queryBuilder.andWhere(`LOWER(user.${key}) = LOWER(:${key})`, {
+          [key]: filter[key],
+        });
       }
     });
 
-    if (!search && !Object.keys(filter).length) {
+    if (
+      !search &&
+      Object.keys(filter).every((key) => filter[key] === undefined)
+    ) {
       queryBuilder.skip((page - 1) * limit);
       queryBuilder.take(limit);
     }
 
-    queryBuilder.orderBy('user.createdAt', 'DESC');
+    const stringColumns = ['firstName', 'lastName', 'email']; // Add other string columns if needed
+
+    sort.forEach((sortParam) => {
+      const direction = sortParam[0] === '-' ? 'DESC' : 'ASC';
+      const column = sortParam[0] === '-' ? sortParam.slice(1) : sortParam;
+      // queryBuilder.addOrderBy(`user.${column}`, direction);
+      if (stringColumns.includes(column)) {
+        queryBuilder.addOrderBy(`LOWER(user.${column})`, direction);
+      } else {
+        queryBuilder.addOrderBy(`user.${column}`, direction);
+      }
+    });
 
     const [data, total] = await queryBuilder.getManyAndCount();
+    console.log(queryBuilder.getSql());
+
+    // const users = data.map((user) => plainToClass(User, user));
 
     return {
       data,
