@@ -7,12 +7,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 // import { plainToClass } from 'class-transformer';
+import { BaseService } from 'src/common/base.service';
 
 @Injectable()
-export class UsersService {
+export class UsersService extends BaseService<User> {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
-  ) {}
+  ) {
+    super(usersRepository);
+  }
+
+  protected getSearchableColumns(): string[] {
+    return ['firstName', 'lastName', 'email'];
+  }
+
+  protected getSortableStringColumns(): string[] {
+    return ['firstName', 'lastName'];
+  }
 
   async create(attributes: Partial<User>) {
     const existingUser = await this.usersRepository.findOneBy({
@@ -29,61 +40,6 @@ export class UsersService {
     } catch (error) {
       throw error;
     }
-  }
-
-  async findAll(
-    filter: Partial<User>,
-    search: string,
-    page: number,
-    limit: number,
-    sort: string[],
-  ) {
-    const queryBuilder = this.usersRepository.createQueryBuilder('user');
-
-    if (search) {
-      queryBuilder.where(
-        'LOWER(user.firstName) LIKE :search OR LOWER(user.lastName) LIKE :search',
-        { search: `%${search.toLowerCase()}%` },
-      );
-    }
-
-    Object.keys(filter).forEach((key) => {
-      if (filter[key] !== undefined) {
-        queryBuilder.andWhere(`LOWER(user.${key}) = LOWER(:${key})`, {
-          [key]: filter[key],
-        });
-      }
-    });
-
-    if (
-      !search &&
-      Object.keys(filter).every((key) => filter[key] === undefined)
-    ) {
-      queryBuilder.skip((page - 1) * limit);
-      queryBuilder.take(limit);
-    }
-
-    const stringColumns = ['firstName', 'lastName', 'email']; // Add other string columns if needed
-
-    sort.forEach((sortParam) => {
-      const direction = sortParam[0] === '-' ? 'DESC' : 'ASC';
-      const column = sortParam[0] === '-' ? sortParam.slice(1) : sortParam;
-      // queryBuilder.addOrderBy(`user.${column}`, direction);
-      if (stringColumns.includes(column)) {
-        queryBuilder.addOrderBy(`LOWER(user.${column})`, direction);
-      } else {
-        queryBuilder.addOrderBy(`user.${column}`, direction);
-      }
-    });
-
-    const [data, total] = await queryBuilder.getManyAndCount();
-
-    // const users = data.map((user) => plainToClass(User, user));
-
-    return {
-      data,
-      total,
-    };
   }
 
   async findOne(id: number) {
