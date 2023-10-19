@@ -31,6 +31,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 import { MailerService } from '@nestjs-modules/mailer';
 import { validatePagination } from 'src/utils/pagination.utils';
+import validator from 'validator';
 
 @UseGuards(ThrottlerGuard)
 @Controller('api/v1/users')
@@ -153,13 +154,22 @@ export class UsersController {
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
     @Query('firstName') firstName: string,
     @Query('lastName') lastName: string,
+    @Query('search') search: string,
   ) {
     const maxLimit = 50;
     validatePagination(limit, page, maxLimit);
     if (email) {
       return this.usersService.findOneByEmail(email);
     }
-    return this.usersService.findAll({ firstName, lastName }, page, limit);
+    // search = search.trim().replace(/[^\w\s]/gi, '');
+    search = validator.escape(search.trim());
+
+    return this.usersService.findAll(
+      { firstName, lastName },
+      search,
+      page,
+      limit,
+    );
   }
 
   @Get('/:id')

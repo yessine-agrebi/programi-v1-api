@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository, Equal, FindManyOptions } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -30,27 +30,35 @@ export class UsersService {
     }
   }
 
-  async findAll(filter: Partial<User>, page: number, limit: number) {
-    const where = Object.keys(filter).reduce((prev, curr) => {
-      if (filter[curr] !== undefined) {
-        return { ...prev, [curr]: Equal(filter[curr]) };
-      }
-      return prev;
-    }, {});
+  async findAll(
+    filter: Partial<User>,
+    search: string,
+    page: number,
+    limit: number,
+  ) {
+    const queryBuilder = this.usersRepository.createQueryBuilder('user');
 
-    const options: FindManyOptions<User> = {
-      where,
-      order: {
-        createdAt: 'DESC',
-      },
-    };
-
-    if (Object.keys(where).length === 0) {
-      options.skip = (page - 1) * limit;
-      options.take = limit;
+    if (search) {
+      queryBuilder.where(
+        'LOWER(user.firstName) LIKE :search OR LOWER(user.lastName) LIKE :search',
+        { search: `%${search.toLowerCase()}%` },
+      );
     }
 
-    const [data, total] = await this.usersRepository.findAndCount(options);
+    Object.keys(filter).forEach((key) => {
+      if (filter[key] !== undefined) {
+        queryBuilder.andWhere(`user.${key} = :${key}`, { [key]: filter[key] });
+      }
+    });
+
+    if (!search && !Object.keys(filter).length) {
+      queryBuilder.skip((page - 1) * limit);
+      queryBuilder.take(limit);
+    }
+
+    queryBuilder.orderBy('user.createdAt', 'DESC');
+
+    const [data, total] = await queryBuilder.getManyAndCount();
 
     return {
       data,
