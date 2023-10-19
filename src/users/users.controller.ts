@@ -157,21 +157,18 @@ export class UsersController {
     @Query('firstName') firstName: string,
     @Query('lastName') lastName: string,
     @Query('search') search: string,
-    // @Query('sort') sort: string,
     @Query('sort', new DefaultValuePipe([]), ParseArrayPipe) sort: string[],
   ) {
     const maxLimit = 50;
     validatePagination(limit, page, maxLimit);
-    if (email) {
-      return this.usersService.findOneByEmail(email);
-    }
+
     if (search) {
       // search = search.trim().replace(/[^\w\s]/gi, '');
       search = validator.escape(search.trim());
     }
 
     return this.usersService.findAll(
-      { firstName, lastName },
+      { firstName, lastName, email },
       search,
       page,
       limit,

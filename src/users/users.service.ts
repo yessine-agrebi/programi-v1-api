@@ -77,7 +77,6 @@ export class UsersService {
     });
 
     const [data, total] = await queryBuilder.getManyAndCount();
-    console.log(queryBuilder.getSql());
 
     // const users = data.map((user) => plainToClass(User, user));
 
