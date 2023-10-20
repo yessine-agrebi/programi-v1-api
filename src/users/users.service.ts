@@ -53,6 +53,13 @@ export class UsersService extends BaseService<User> {
     return user;
   }
 
+  async findOneWithoutException(id: number) {
+    if (!id) {
+      return null;
+    }
+    return this.usersRepository.findOneBy({ userId: id });
+  }
+
   async findOneByEmail(email: string) {
     const user = await this.usersRepository.findOneBy({ email });
     // if (!user) {
