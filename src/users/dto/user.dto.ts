@@ -23,6 +23,9 @@ export class UserDto {
   age?: number;
 
   @Expose()
+  isAdmin: boolean;
+
+  @Expose()
   createdAt: Date;
 
   @Expose()

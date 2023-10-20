@@ -33,6 +33,7 @@ import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 import { MailerService } from '@nestjs-modules/mailer';
 import { validatePagination } from 'src/utils/pagination.utils';
 import validator from 'validator';
+import { AdminGuard } from 'src/guards/admin.guard';
 
 @UseGuards(ThrottlerGuard)
 @Controller('api/v1/users')
@@ -189,6 +190,7 @@ export class UsersController {
   }
 
   @Delete('/:id')
+  @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteUser(@Param('id') id: string) {
     await this.usersService.remove(+id);
