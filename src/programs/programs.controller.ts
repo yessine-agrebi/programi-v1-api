@@ -32,8 +32,9 @@ export class ProgramsController {
   }
 
   @Get()
-  findAllPrograms() {
-    return this.programsService.findAll();
+  @UseGuards(AuthGuard)
+  findAllPrograms(@CurrentUser() user: User) {
+    return this.programsService.findAll(user.userId);
   }
 
   @Get('/:id')

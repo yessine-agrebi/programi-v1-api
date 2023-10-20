@@ -22,18 +22,32 @@ export class ProgramsService {
     }
   }
 
-  findAll() {
+  findAll(userId?: number) {
     //excluse created_at and updated_at from the response
-    return this.programsRepository.find({
-      select: [
-        'programId',
-        'programName',
-        'description',
-        'startDate',
-        'endDate',
-        'userId',
-      ],
-    });
+    if (userId) {
+      return this.programsRepository.find({
+        where: { userId: userId },
+        select: [
+          'programId',
+          'programName',
+          'description',
+          'startDate',
+          'endDate',
+          'userId',
+        ],
+      });
+    } else {
+      return this.programsRepository.find({
+        select: [
+          'programId',
+          'programName',
+          'description',
+          'startDate',
+          'endDate',
+          'userId',
+        ],
+      });
+    }
   }
 
   findOne(id: number) {
