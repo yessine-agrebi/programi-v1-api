@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Program } from './entities/program.entity';
@@ -50,35 +54,46 @@ export class ProgramsService {
     }
   }
 
-  findOne(id: number) {
-    return this.programsRepository.findOneBy({ programId: id });
-  }
-
-  async update(id: number, attributes: Partial<Program>) {
-    const user = await this.usersService.findOne(attributes.userId);
-    if (!user) {
-      throw new NotFoundException(
-        `User with id ${attributes.userId} not found`,
+  async findOne(programId: number, currentUser?: User) {
+    const program = await this.programsRepository.findOneBy({ programId });
+    if (!program) {
+      throw new NotFoundException(`Program with id ${programId} not found`);
+    }
+    if (program.userId !== currentUser.userId && !currentUser.isAdmin) {
+      throw new UnauthorizedException(
+        `You are not authorized to view this program`,
       );
     }
-    try {
-      const program = await this.programsRepository.findOneBy({
-        programId: id,
-      });
-      if (!program) {
-        throw new NotFoundException(`Program with id ${id} not found`);
-      }
-      Object.assign(program, attributes);
-      return this.programsRepository.save(program);
-    } catch (error) {
-      throw error;
-    }
+    return program;
   }
 
-  async remove(id: number) {
-    const program = await this.findOne(id);
+  async update(
+    programId: number,
+    attributes: Partial<Program>,
+    currentUser: User,
+  ) {
+    const program = await this.programsRepository.findOneBy({ programId });
     if (!program) {
-      throw new NotFoundException(`Program with id ${id} not found`);
+      throw new NotFoundException(`Program with id ${programId} not found`);
+    }
+    if (program.userId !== currentUser.userId && !currentUser.isAdmin) {
+      throw new UnauthorizedException(
+        `You are not authorized to update this program`,
+      );
+    }
+    Object.assign(program, attributes);
+    return this.programsRepository.save(program);
+  }
+
+  async remove(programId: number, currentUser: User) {
+    const program = await this.findOne(programId, currentUser);
+    if (!program) {
+      throw new NotFoundException(`Program with id ${programId} not found`);
+    }
+    if (program.userId !== currentUser.userId && !currentUser.isAdmin) {
+      throw new UnauthorizedException(
+        `You are not authorized to delete this program`,
+      );
     }
     return this.programsRepository.remove(program);
   }

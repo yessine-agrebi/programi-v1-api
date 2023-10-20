@@ -21,39 +21,48 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { ProgramDto } from './dto/program.dto';
 
 @Controller('api/v1/programs')
+@UseGuards(AuthGuard)
 export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   @Serialize(ProgramDto)
   createProgram(@Body() body: CreateProgramDto, @CurrentUser() user: User) {
     return this.programsService.create(body, user);
   }
 
   @Get()
-  @UseGuards(AuthGuard)
   findAllPrograms(@CurrentUser() user: User) {
     return this.programsService.findAll(user.userId);
   }
 
-  @Get('/:id')
-  async findOneProgram(@Param('id') id: string) {
-    const program = await this.programsService.findOne(+id);
+  @Get('/:programId')
+  async findOneProgram(
+    @Param('programId') programId: string,
+    @CurrentUser() user: User,
+  ) {
+    const program = await this.programsService.findOne(+programId, user);
     if (!program) {
-      throw new NotFoundException(`Error finding program with id ${id}`);
+      throw new NotFoundException(`Error finding program with id ${programId}`);
     }
     return program;
   }
 
-  @Patch(':id')
-  updateProgram(@Param('id') id: string, @Body() body: UpdateProgramDto) {
-    return this.programsService.update(+id, body);
+  @Patch(':programId')
+  updateProgram(
+    @Param('programId') programId: string,
+    @Body() body: UpdateProgramDto,
+    @CurrentUser() user: User,
+  ) {
+    return this.programsService.update(+programId, body, user);
   }
 
-  @Delete(':id')
+  @Delete(':programId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async removeProgram(@Param('id') id: string) {
-    await this.programsService.remove(+id);
+  async removeProgram(
+    @Param('programId') programId: string,
+    @CurrentUser() user: User,
+  ) {
+    await this.programsService.remove(+programId, user);
   }
 }
