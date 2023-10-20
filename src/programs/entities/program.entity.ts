@@ -34,7 +34,7 @@ export class Program {
   @OneToMany(() => Workout, (workout) => workout.program)
   workouts: Workout[];
 
-  @ManyToOne(() => User, (user) => user.programs)
+  @ManyToOne(() => User, (user) => user.programs, { onDelete: 'SET NULL' }) //! CHECK
   @JoinColumn({ name: 'user_id' })
   user: User;
 

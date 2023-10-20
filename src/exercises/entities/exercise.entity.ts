@@ -29,7 +29,7 @@ export class Exercise {
   @Column()
   equipment: string;
 
-  @ManyToOne(() => User, (user) => user.exercises)
+  @ManyToOne(() => User, (user) => user.exercises, { onDelete: 'SET NULL' }) //! CHECK
   @JoinColumn({ name: 'user_id' })
   user: User;
 
