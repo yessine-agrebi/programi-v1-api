@@ -39,6 +39,9 @@ export class User {
   @Column({ nullable: true })
   age?: number;
 
+  @Column({ default: true, name: 'is_admin' })
+  isAdmin: boolean;
+
   @OneToMany(() => Program, (program) => program.user)
   programs: Program[];
 
