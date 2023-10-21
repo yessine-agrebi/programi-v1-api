@@ -1,0 +1,999 @@
+{
+	"info": {
+		"_postman_id": "71134127-ab7c-451b-92d9-e4e48f5f3098",
+		"name": "programi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20565698"
+	},
+	"item": [
+		{
+			"name": "Workout",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Signup",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"medcompte02@gmail.com\",\r\n    \"password\": \"rami\",\r\n    \"firstName\": \"dsds\",\r\n    \"lastName\": \"dev\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/signup",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Signin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"medcompte02@gmail.com\",\r\n    \"password\": \"rami\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/signin",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"signin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Current user",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"gdfgddggdf@dqd.ddve\",\r\n    \"password\": \"rami\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/current-user",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"current-user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Signout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/signout",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"signout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"medcompte01@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/reset-password",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"reset-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\": \"4053bcdadf62ab4abc3e2621118589c16d0f0153\",\r\n    \"password\": \"ramii\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/auth/new-password",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"auth",
+										"new-password"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Admin",
+							"item": [
+								{
+									"name": "Delete user",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}/api/v1/users/432",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"users",
+												"432"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/users?page=2&limit=10",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "email",
+											"value": "Horacio15@gmail.com",
+											"disabled": true
+										},
+										{
+											"key": "firstName",
+											"value": "Like",
+											"disabled": true
+										},
+										{
+											"key": "search",
+											"value": "lik",
+											"disabled": true
+										},
+										{
+											"key": "sort[]",
+											"value": "-firstName",
+											"disabled": true
+										},
+										{
+											"key": "sort[]",
+											"value": "height",
+											"disabled": true
+										},
+										{
+											"key": "sort[]",
+											"value": "-email",
+											"disabled": true
+										},
+										{
+											"key": "heightMin",
+											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "heightMax",
+											"value": "150",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get users By Email",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/users?email=gdfgggdf@dqd.ddve",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "gdfgggdf@dqd.ddve"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/users/316",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"316"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update user",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"rami@fsfsdaradfsfsmi.rdvette\",\r\n    \"password\": \"updated\",\r\n    \"firstName\": \"aaa\",\r\n    \"lastName\": \"dev\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/18",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"18"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User profile picture",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/ramic/Downloads/pics/Windows 11 Bloom (1920x1080).jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/profile-picture",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"profile-picture"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Program",
+					"item": [
+						{
+							"name": "Admin",
+							"item": [
+								{
+									"name": "(admin) Get programs",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}/api/v1/admin/programs",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"admin",
+												"programs"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "(admin) Get user programs",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}/api/v1/admin/programs/users/433",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"admin",
+												"programs",
+												"users",
+												"433"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Create program",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"programName\": \"My New Program\",\r\n  \"description\": \"This is a description of my new program.\",\r\n  \"startDate\": \"2022-01-01\",\r\n  \"endDate\": \"2022-12-31\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/programs",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"programs"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get programs",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/programs",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"programs"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get program",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/programs/1",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"programs",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get workouts by programId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/programs/workouts/17",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"programs",
+										"workouts",
+										"17"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update program",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"programName\": \"My New Programmmmm\",\r\n  \"description\": \"This is a description of my new program.mmmmm\",\r\n  \"startDate\": \"2022-01-01\",\r\n  \"endDate\": \"2022-12-31\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/programs/171",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"programs",
+										"171"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete program",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/programs/1",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"programs",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Exercise",
+					"item": [
+						{
+							"name": "Create exercise",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"exerciseName\": \"Bench Press\",\r\n  \"bodyPart\": \"Chest\",\r\n  \"equipment\": \"Barbell\",\r\n  \"bestSetId\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/exercises",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"exercises"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get exercises",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/exercises?page=2&limit=3",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"exercises"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										},
+										{
+											"key": "exerciseName",
+											"value": "molestiae corporis cumque",
+											"disabled": true
+										},
+										{
+											"key": "search",
+											"value": "eum",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get exercise",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/exercises/1",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"exercises",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update exercise",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"exerciseName\": \"Bench Pressssssssss\",\r\n  \"bodyPart\": \"Chest\",\r\n  \"equipment\": \"Barbell\",\r\n  \"userId\": 1,\r\n  \"bestSetId\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/exercises/4",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"exercises",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete exercice",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/exercises/171",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"exercises",
+										"171"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Workout",
+					"item": [
+						{
+							"name": "Create workout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"programId\": 17,\r\n  \"exerciseId\": 14,\r\n  \"date\": \"2023-10-09T18:15:02.554Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/workouts",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"workouts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get workouts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/workouts",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"workouts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get workout",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/workouts/12",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"workouts",
+										"12"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update workout",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"programId\": 18,\r\n  \"exerciseId\": 5,\r\n  \"date\": \"2022-03-01\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/workouts/8",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"workouts",
+										"8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete workout",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/workouts/11",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"workouts",
+										"11"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Set",
+					"item": [
+						{
+							"name": "Create set",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"weight\": 100,\r\n  \"reps\": 10,\r\n  \"setNum\": 1,\r\n  \"workoutId\": 12\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/sets",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get sets",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/sets",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get set",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/sets/2",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sets",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get sets by exercise id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/sets/exercise/14",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sets",
+										"exercise",
+										"14"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update set",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"weight\": 100000,\r\n  \"reps\": 10,\r\n  \"setNum\": 1,\r\n  \"workoutId\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/sets/1",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sets",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete set",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/sets/1",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sets",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

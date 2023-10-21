@@ -17,6 +17,8 @@ import {
   DefaultValuePipe,
   ParseIntPipe,
   ParseArrayPipe,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -34,6 +36,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { validatePagination } from 'src/utils/pagination.utils';
 import validator from 'validator';
 import { AdminGuard } from 'src/guards/admin.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(ThrottlerGuard)
 @Controller('api/v1/users')
@@ -194,5 +197,14 @@ export class UsersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteUser(@Param('id') id: string) {
     await this.usersService.remove(+id);
+  }
+
+  @Post('/profile-picture')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadProfilePicture(
+    @CurrentUser() user: User,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.usersService.uploadProfilePicture(user.userId, file);
   }
 }
