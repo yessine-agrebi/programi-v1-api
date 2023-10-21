@@ -123,10 +123,7 @@ export class UsersController {
     const existingUser = await this.usersService.findOneByEmail(user.email);
     if (existingUser) {
       session.userId = existingUser.userId;
-      return {
-        message: 'Google authentication successful',
-        user: existingUser,
-      };
+      res.redirect(process.env.FRONTEND_URL);
     } else {
       const newUser = await this.usersService.create({
         email: user.email,
