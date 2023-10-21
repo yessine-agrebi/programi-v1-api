@@ -41,6 +41,8 @@ export class User {
 
   @Column({ default: true, name: 'is_admin' })
   isAdmin: boolean;
+  @Column({ nullable: true, name: 'profile_picture' })
+  profilePicture: string;
 
   @OneToMany(() => Program, (program) => program.user)
   programs: Program[];

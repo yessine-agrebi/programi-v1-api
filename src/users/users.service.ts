@@ -8,11 +8,13 @@ import { Not, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 // import { plainToClass } from 'class-transformer';
 import { BaseService } from 'src/common/base.service';
+import { FileUploadService } from 'src/file-upload/file-upload.service';
 
 @Injectable()
 export class UsersService extends BaseService<User> {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
+    private readonly fileUploadService: FileUploadService,
   ) {
     super(usersRepository);
   }
@@ -98,5 +100,24 @@ export class UsersService extends BaseService<User> {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     this.usersRepository.remove(user);
+  }
+
+  async uploadProfilePicture(userId: number, imageFile: Express.Multer.File) {
+    const user = await this.findOne(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Save the file and get the file path
+    const filePath = this.fileUploadService.saveFile(
+      imageFile,
+      'users-profile-pictures',
+    );
+
+    // Update the user entity with the file path
+    user.profilePicture = filePath;
+    await this.usersRepository.save(user);
+
+    return user;
   }
 }
