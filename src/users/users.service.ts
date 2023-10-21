@@ -104,18 +104,16 @@ export class UsersService extends BaseService<User> {
 
   async uploadProfilePicture(userId: number, imageFile: Express.Multer.File) {
     const user = await this.findOne(userId);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
 
     // Save the file and get the file path
     const filePath = this.fileUploadService.saveFile(
       imageFile,
       'users-profile-pictures',
     );
+    const standardizedFilePath = filePath.replace(/\\/g, '/');
 
     // Update the user entity with the file path
-    user.profilePicture = filePath;
+    user.profilePicture = standardizedFilePath;
     await this.usersRepository.save(user);
 
     return user;
