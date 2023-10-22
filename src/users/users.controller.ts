@@ -19,6 +19,7 @@ import {
   ParseArrayPipe,
   UseInterceptors,
   UploadedFile,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -37,9 +38,12 @@ import { validatePagination } from 'src/utils/pagination.utils';
 import validator from 'validator';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { join } from 'path';
+import { createReadStream, existsSync } from 'fs';
+import { Response } from 'express';
 
 @UseGuards(ThrottlerGuard)
-@Controller('api/v1/users')
+@Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -203,5 +207,33 @@ export class UsersController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     return this.usersService.uploadProfilePicture(user.userId, file);
+  }
+
+  @Get('/profile-picture/:filename')
+  @UseGuards(AuthGuard)
+  async getProfilePicture(
+    @Param('filename') filename: string,
+    @CurrentUser() currentUser: User,
+    @Res() res: Response,
+  ) {
+    const user = await this.usersService.findOne(currentUser.userId);
+
+    if (user.profilePicture.includes(filename)) {
+      const filePath = join(
+        __dirname,
+        '..',
+        '..',
+        'uploads',
+        'users-profile-pictures',
+        filename,
+      );
+      if (existsSync(filePath)) {
+        createReadStream(filePath).pipe(res);
+      } else {
+        throw new NotFoundException('File not found');
+      }
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }

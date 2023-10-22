@@ -23,7 +23,7 @@ import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { validatePagination } from 'src/utils/pagination.utils';
 import validator from 'validator';
 
-@Controller('api/v1/exercises')
+@Controller('exercises')
 export class ExercisesController {
   constructor(private readonly exercisesService: ExercisesService) {}
 

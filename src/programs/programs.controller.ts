@@ -20,7 +20,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { ProgramDto } from './dto/program.dto';
 
-@Controller('api/v1/programs')
+@Controller('programs')
 @UseGuards(AuthGuard)
 export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}

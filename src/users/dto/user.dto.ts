@@ -26,6 +26,9 @@ export class UserDto {
   isAdmin: boolean;
 
   @Expose()
+  profilePicture: string;
+
+  @Expose()
   createdAt: Date;
 
   @Expose()

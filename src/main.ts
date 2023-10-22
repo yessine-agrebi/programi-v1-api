@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import * as express from 'express';
-import { join } from 'path';
+// import * as express from 'express';
+// import { join } from 'path';
 
 let CookieSession: any;
 
@@ -13,7 +13,8 @@ async function bootstrap() {
   app.enableCors({ origin: 'http://localhost:3000' });
   app.useGlobalPipes(new ValidationPipe());
   // Serve static files
-  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+  // app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+  app.setGlobalPrefix('api/v1');
   await app.listen(5000);
 }
 bootstrap();
