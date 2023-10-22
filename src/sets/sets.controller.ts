@@ -14,7 +14,7 @@ import { SetsService } from './sets.service';
 import { CreateSetDto } from './dto/create-set.dto';
 import { UpdateSetDto } from './dto/update-set.dto';
 
-@Controller('api/v1/sets')
+@Controller('sets')
 export class SetsController {
   constructor(private readonly setsService: SetsService) {}
 
